@@ -1,7 +1,8 @@
-import type IJobAdvert from "./jobAdvert";
+import type  { Nullable } from "ts-wiz";
+import IJobAdvert from "./jobAdvert";
 
 interface IResume {
-  link: string;
+  googleDriveLink: Nullable<string>;
   jobAdvert: IJobAdvert;
 }
 

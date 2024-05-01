@@ -1,7 +1,8 @@
+import { config } from "dotenv";
+config();
 const env = {
   port: process.env.PORT,
-  mongoUser: process.env.MONGO_USER,
-  mongoPassword: process.env.MONGO_PASSWORD,
+  mongoURI : process.env.MONGO_URI || ""
 };
 
 
