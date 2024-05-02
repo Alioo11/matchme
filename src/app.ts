@@ -9,7 +9,10 @@ const app = express();
 
 const connectMongoDb = async () => {
   try {
-    await mongoose.connect(env.mongoURI + "matchme");
+    await mongoose.connect(env.mongoURI, {
+      user: env.mongoUser,
+      pass: env.mongoPass,
+    });
     console.log("@@ mongo database successfully connected @@");
   } catch (error) {
     console.log("@@ connection to database failed @@");
