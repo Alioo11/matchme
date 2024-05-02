@@ -6,7 +6,7 @@ const runAllCrawlers = () => {
   const crawlers = [CareerJet];
 
   crawlers.forEach((crl) => {
-    crl.start(10);
+    crl.start(30);
   });
 };
 

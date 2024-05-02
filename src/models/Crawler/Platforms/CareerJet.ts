@@ -1,21 +1,17 @@
-import puppeteer from "puppeteer";
 import Crawler from "..";
 import wait from "../../../utils/wait";
 import CompanyApp from "../../Company/index";
 import JobAdvertApp from "../../JobAdvert";
 import ResumeApp from "../../Resume";
 import calculateDateFromText from "../../../helpers/calculateDateFromText";
+import createBrowser from "../../../helpers/browser";
 
 const BASE_URL = "https://careerjet.co.uk";
 const PLATFORM = "career-jet";
 
 class CareerJetCrawler extends Crawler {
   getIdentifiers = async () => {
-    const browser = await puppeteer.launch({
-      executablePath:
-        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-      headless: true, // Set to true if you want to run Chrome in headless mode
-    });
+    const browser = await createBrowser();
     const page = await browser.newPage();
 
     const jobURLs: Array<string | null> = [];
@@ -36,15 +32,19 @@ class CareerJetCrawler extends Crawler {
 
     console.log(`found ${filteredArray.length} jobs !`);
 
-    const jobAdvert = new JobAdvertApp()
+    const jobAdvert = new JobAdvertApp();
 
-    const linksInDatabase = await jobAdvert.objects.find({platform:PLATFORM}, 'link').exec();
+    const linksInDatabase = await jobAdvert.objects
+      .find({ platform: PLATFORM }, "link")
+      .exec();
 
     // Extract the links into an array
-    const databaseLinks = linksInDatabase.map(link => link.link);
+    const databaseLinks = linksInDatabase.map((link) => link.link);
 
     // Filter the input list of strings
-    const filteredStrings = filteredArray.filter(string =>!databaseLinks.includes(`${BASE_URL}${string}`));
+    const filteredStrings = filteredArray.filter(
+      (string) => !databaseLinks.includes(`${BASE_URL}${string}`)
+    );
 
     console.log(`found ${filteredStrings.length} valid jobs !`);
 
@@ -52,12 +52,7 @@ class CareerJetCrawler extends Crawler {
   };
 
   crawlByIdentifier = async (identifier: string) => {
-    const browser = await puppeteer.launch({
-      executablePath:
-        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-      headless: true,
-    });
-
+    const browser = await createBrowser();
     const pageLink = `${BASE_URL}${identifier}`;
     console.log("started scrapping ", pageLink);
 
