@@ -9,6 +9,8 @@ RUN npm install
 
 COPY . .
 
+RUN apk add --no-cache chromium
+
 RUN npm run build
 
 EXPOSE 3000
