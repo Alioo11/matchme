@@ -1,6 +1,8 @@
 
 FROM node:18-alpine
 
+RUN apk add --no-cache chromium
+
 WORKDIR /app
 
 COPY package*.json .
@@ -8,8 +10,6 @@ COPY package*.json .
 RUN npm install
 
 COPY . .
-
-RUN apk add --no-cache chromium
 
 RUN npm run build
 

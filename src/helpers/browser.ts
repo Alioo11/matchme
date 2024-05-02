@@ -1,7 +1,7 @@
 import puppeteer from "puppeteer";
 import env from "../constants/env";
 
-const linuxChromiumExecutablePath = "/usr/bin/chromium-browser";
+const linuxChromiumExecutablePath = "/usr/bin/chromium-browser --no-sandbox";
 const macOSChromiumExecutablePath =
   "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 
