@@ -7,6 +7,7 @@ import ResumeApp from "../../Resume";
 import calculateDateFromText from "../../../helpers/calculateDateFromText";
 
 const BASE_URL = "https://careerjet.co.uk";
+const PLATFORM = "career-jet";
 
 class CareerJetCrawler extends Crawler {
   getIdentifiers = async () => {
@@ -30,14 +31,14 @@ class CareerJetCrawler extends Crawler {
       jobURLs.push(...jobUrl);
     }
 
-    console.log(`found ${jobURLs.length} jobs !`);
     await browser.close();
     const filteredArray = jobURLs.filter(Boolean) as Array<string>;
 
+    console.log(`found ${filteredArray.length} jobs !`);
 
     const jobAdvert = new JobAdvertApp()
 
-    const linksInDatabase = await jobAdvert.objects.find({}, 'link').exec();
+    const linksInDatabase = await jobAdvert.objects.find({platform:PLATFORM}, 'link').exec();
 
     // Extract the links into an array
     const databaseLinks = linksInDatabase.map(link => link.link);
@@ -68,8 +69,8 @@ class CareerJetCrawler extends Crawler {
     let resumeId = null;
     let jobAdvertId = null;
 
+    const page = await browser.newPage();
     try {
-      const page = await browser.newPage();
       await page.goto(pageLink);
 
       // create company
@@ -77,7 +78,6 @@ class CareerJetCrawler extends Crawler {
       const companyName = await companyTitleElement?.evaluate(
         (element) => element.innerHTML
       )!;
-      companyId = await company.getOrCreate(companyName);
 
       // create jobAdvert
       const companyContentElement = await page.waitForSelector(".content");
@@ -92,12 +92,14 @@ class CareerJetCrawler extends Crawler {
       )!;
       const announceDate = calculateDateFromText(announceDateAsText || "");
 
+      companyId = await company.getOrCreate(companyName);
+
       const jobAvd = new jobAdvert.objects({
-        company: companyId,
-        resume: resumeId,
-        description: content,
         crawledAt: new Date().getTime(),
         announcedAt: announceDate,
+        description: content,
+        platform: PLATFORM,
+        company: companyId,
         link: pageLink,
       });
 
@@ -107,7 +109,7 @@ class CareerJetCrawler extends Crawler {
       resumeId = await resume.getOrCreate(jobAvd._id);
 
       console.log("done !");
-      await page.close();
+      await browser.close();
       return true;
     } catch (error) {
       // revert db records
@@ -115,6 +117,7 @@ class CareerJetCrawler extends Crawler {
       console.error(error);
       resume.objects.findByIdAndRemove(resumeId);
       jobAdvert.objects.findByIdAndRemove(jobAdvertId);
+      await browser.close();
       return false;
     }
   };

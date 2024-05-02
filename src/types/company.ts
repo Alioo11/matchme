@@ -5,7 +5,6 @@ interface ICompany {
   location: string;
   title: Nullable<string>;
   visa: Nullable<visa_status>;
-  jobAdvert: IJobAdvert;
 }
 
 export default ICompany;

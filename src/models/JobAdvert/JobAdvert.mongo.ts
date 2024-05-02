@@ -7,7 +7,8 @@ const JobAdvertMongoModel = new Schema<IJobAdvert>({
   link: { type: String, required: true, unique: true },
   description: { type: String, required: true },
   lastApply: { type: Number, default: null },
-  company: { type: Types.ObjectId, ref: "company", required: true },
+  platform: { type: String, required: true },
+  company: { type: Types.ObjectId, ref: "company" },
 });
 
 const JobAdvertModel = model("jobAdvert", JobAdvertMongoModel);

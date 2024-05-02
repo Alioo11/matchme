@@ -1,14 +1,14 @@
-import type ICompany from "./company";
-import type IResume from "./resume";
 import type { Nullable } from "ts-wiz";
+import ICompany from "./company";
 
 interface IJobAdvert {
-  company: ICompany;
   crawledAt: number;
   announcedAt: number;
   link: string;
   description: string;
   lastApply: Nullable<number>;
+  platform: String;
+  company: ICompany;
 }
 
 export default IJobAdvert;

@@ -1,13 +1,13 @@
 import wait from "../../utils/wait";
-import JobAdvertApp from "../JobAdvert";
 
 abstract class Crawler {
   abstract getIdentifiers: () => Promise<Array<string>>;
   abstract crawlByIdentifier: (identifier: string) => Promise<Boolean>;
 
-  start = async () => {
+  start = async (limit: number) => {
     const identifiers = await this.getIdentifiers();
-    for (let i = 0; i < identifiers.length; i++) {
+    const iterationCount = Math.min(limit, identifiers.length);
+    for (let i = 0; i < iterationCount; i++) {
       await wait(1000);
       await this.crawlByIdentifier(identifiers[i]);
     }

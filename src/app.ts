@@ -1,13 +1,14 @@
 import express from "express";
 import env from "./constants/env";
 import mongoose from "mongoose";
-import runCrawlers from "./models/Crawler/task";
+import cron from "node-cron";
+import runAllCrawlers from "./tasks/crawler";
 
 const app = express();
 
 const connectMongoDb = async () => {
   try {
-    await mongoose.connect(env.mongoURI);
+    const res = await mongoose.connect(env.mongoURI + "matchme");
     console.log("@@ mongo database successfully connected @@");
   } catch (error) {
     console.log("@@ connection to database failed @@");
@@ -17,10 +18,14 @@ const connectMongoDb = async () => {
 
 connectMongoDb();
 
-
 app.get("/", (req, res) => {
   res.send("running crawlers ...");
-  runCrawlers();
+  runAllCrawlers();
+});
+
+cron.schedule("*/1 * * * *", () => {
+  console.log("crawlers starting ...");
+  runAllCrawlers();
 });
 
 app.listen(env.port, () => {
