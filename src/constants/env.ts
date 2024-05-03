@@ -1,11 +1,16 @@
 import { config } from "dotenv";
+
 config();
+
+const isProduction = process.env.NODE_ENV === "production";
+
 const env = {
   port: process.env.PORT,
-  isProd: process.env.NODE_ENV === "production",
-  mongoURI: process.env.MONGO_URI || "",
+  isProd: isProduction,
+  mongoHost: process.env.MONGO_HOST || "",
   mongoUser: process.env.MONGO_USER,
   mongoPass: process.env.MONGO_PASSWORD,
+  mongoDBName: process.env.MONGO_DB_NAME,
 };
 
 export default env;
