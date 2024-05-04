@@ -19,7 +19,6 @@ class CareerJetUSACrawler extends Crawler {
     for (let i = 0; i < 100; i++) {
       await wait(1000);
       await page.goto(`${BASE_URL}/jobs?s=frontend&l=USA&radius=15&sort=relevance&p=${i}`);
-      // await page.waitForSelector(".job",});
       const jobUrl = await page.$$eval(".job", (elements) =>
         elements.map((element) => element.getAttribute("data-url"))
       );

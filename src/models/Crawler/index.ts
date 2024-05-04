@@ -6,7 +6,7 @@ abstract class Crawler {
 
   start = async (limit: number) => {
     const identifiers = await this.getIdentifiers();
-    const iterationCount = Math.min(limit, identifiers.length);
+    const iterationCount = Math.min(limit , identifiers.length)
     for (let i = 0; i < iterationCount; i++) {
       await wait(1000);
       await this.crawlByIdentifier(identifiers[i]);

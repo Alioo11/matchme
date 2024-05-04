@@ -1,15 +1,15 @@
 import CareerJetUSACrawler from "../models/Crawler/Platforms/CareerJetUSA";
 import CareerJetCrawler from "../models/Crawler/Platforms/CareerJet";
 
-const runAllCrawlers = () => {
+const runAllCrawlers = async () => {
   const CareerJet = new CareerJetCrawler();
   const CareerJetUSA = new CareerJetUSACrawler();
 
-  const crawlers = [CareerJet,CareerJetUSA];
+  const crawlers = [CareerJetUSA];
 
-  crawlers.forEach((crl) => {
-    crl.start(30);
-  });
+  for (let i = 0; i < crawlers.length; i++) {
+    await crawlers[i].start(30);
+  }
 };
 
 export default runAllCrawlers;
