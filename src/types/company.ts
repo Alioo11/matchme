@@ -1,5 +1,4 @@
 import { Nullable } from "ts-wiz";
-import IJobAdvert from "./jobAdvert";
 
 interface ICompany {
   location: string;
