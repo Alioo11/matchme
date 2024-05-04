@@ -5,7 +5,7 @@ const runAllCrawlers = async () => {
   const CareerJet = new CareerJetCrawler();
   const CareerJetUSA = new CareerJetUSACrawler();
 
-  const crawlers = [CareerJetUSA];
+  const crawlers = [CareerJetUSA, CareerJet];
 
   for (let i = 0; i < crawlers.length; i++) {
     await crawlers[i].start(30);
