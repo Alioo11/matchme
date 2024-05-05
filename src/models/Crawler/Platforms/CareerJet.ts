@@ -5,12 +5,16 @@ import JobAdvertApp from "../../JobAdvert";
 import ResumeApp from "../../Resume";
 import calculateDateFromText from "../../../helpers/calculateDateFromText";
 import createBrowser from "../../../helpers/browser";
+import JobAdvertIndexApp from "../../../models/JobAdvertIndex";
 
 const BASE_URL = "https://careerjet.co.uk";
-const PLATFORM = "career-jet";
+const PLATFORM = "career-jet-(EUROPE)";
 
 class CareerJetCrawler extends Crawler {
-  getIdentifiers = async () => {
+  platform: string = PLATFORM;
+  startIndexing = async (limit: number) => {
+    const jobAdvertIndex = new JobAdvertIndexApp();
+
     const browser = await createBrowser();
     const page = await browser.newPage();
 
@@ -23,7 +27,8 @@ class CareerJetCrawler extends Crawler {
       const jobUrl = await page.$$eval(".job", (elements) =>
         elements.map((element) => element.getAttribute("data-url"))
       );
-      if (jobUrl.length === 0) break;
+      if (jobUrl.length === 0 || jobURLs.length + jobUrl.length > limit) break;
+
       jobURLs.push(...jobUrl);
     }
 
@@ -32,28 +37,14 @@ class CareerJetCrawler extends Crawler {
 
     console.log(`found ${filteredArray.length} jobs !`);
 
-    const jobAdvert = new JobAdvertApp();
-
-    const linksInDatabase = await jobAdvert.objects
-      .find({ platform: PLATFORM }, "link")
-      .exec();
-
-    // Extract the links into an array
-    const databaseLinks = linksInDatabase.map((link) => link.link);
-
-    // Filter the input list of strings
-    const filteredStrings = filteredArray.filter(
-      (string) => !databaseLinks.includes(`${BASE_URL}${string}`)
-    );
-
-    console.log(`found ${filteredStrings.length} valid jobs !`);
-
-    return filteredStrings;
+    for (let i = 0; i < filteredArray.length; i++) {
+      await jobAdvertIndex.create(`${BASE_URL}${filteredArray[i]}`, PLATFORM);
+    }
   };
 
   crawlByIdentifier = async (identifier: string) => {
-    const browser = await createBrowser();
-    const pageLink = `${BASE_URL}${identifier}`;
+    const browser = await createBrowser({headless:false});
+    const pageLink = identifier;
     console.log("started scrapping ", pageLink);
 
     const resume = new ResumeApp();
@@ -105,7 +96,7 @@ class CareerJetCrawler extends Crawler {
 
       console.log("done !");
       await browser.close();
-      return true;
+      return jobAvd;
     } catch (error) {
       // revert db records
       console.error("something went wrong");
@@ -113,7 +104,7 @@ class CareerJetCrawler extends Crawler {
       resume.objects.findByIdAndRemove(resumeId);
       jobAdvert.objects.findByIdAndRemove(jobAdvertId);
       await browser.close();
-      return false;
+      return null;
     }
   };
 }

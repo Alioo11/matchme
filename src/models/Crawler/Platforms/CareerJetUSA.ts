@@ -5,12 +5,16 @@ import JobAdvertApp from "../../JobAdvert";
 import ResumeApp from "../../Resume";
 import calculateDateFromText from "../../../helpers/calculateDateFromText";
 import createBrowser from "../../../helpers/browser";
+import JobAdvertIndexApp from "../../../models/JobAdvertIndex";
 
 const BASE_URL = "https://www.careerjet.com";
-const PLATFORM = "career-jet";
+const PLATFORM = "career-jet-(USA)";
 
 class CareerJetUSACrawler extends Crawler {
-  getIdentifiers = async () => {
+  platform: string = PLATFORM;
+  startIndexing = async (limit: number) => {
+    const jobAdvertIndex = new JobAdvertIndexApp();
+
     const browser = await createBrowser();
     const page = await browser.newPage();
 
@@ -18,11 +22,13 @@ class CareerJetUSACrawler extends Crawler {
 
     for (let i = 0; i < 100; i++) {
       await wait(1000);
-      await page.goto(`${BASE_URL}/jobs?s=frontend&l=USA&radius=15&sort=relevance&p=${i}`);
+      await page.goto(
+        `${BASE_URL}/jobs?s=frontend&l=USA&radius=15&sort=relevance&p=${i}`
+      );
       const jobUrl = await page.$$eval(".job", (elements) =>
         elements.map((element) => element.getAttribute("data-url"))
       );
-      if (jobUrl.length === 0) break;
+      if (jobUrl.length === 0 || jobURLs.length + jobUrl.length > limit) break;
       jobURLs.push(...jobUrl);
     }
 
@@ -31,28 +37,15 @@ class CareerJetUSACrawler extends Crawler {
 
     console.log(`found ${filteredArray.length} jobs !`);
 
-    const jobAdvert = new JobAdvertApp();
+    for (let i = 0; i < filteredArray.length; i++) {
+      await jobAdvertIndex.create(`${BASE_URL}${filteredArray[i]}`, this.platform);
+    }
 
-    const linksInDatabase = await jobAdvert.objects
-      .find({ platform: PLATFORM }, "link")
-      .exec();
-
-    // Extract the links into an array
-    const databaseLinks = linksInDatabase.map((link) => link.link);
-
-    // Filter the input list of strings
-    const filteredStrings = filteredArray.filter(
-      (string) => !databaseLinks.includes(`${BASE_URL}${string}`)
-    );
-
-    console.log(`found ${filteredStrings.length} valid jobs !`);
-
-    return filteredStrings;
   };
 
   crawlByIdentifier = async (identifier: string) => {
     const browser = await createBrowser();
-    const pageLink = `${BASE_URL}${identifier}`;
+    const pageLink = identifier;
     console.log("started scrapping ", pageLink);
 
     const resume = new ResumeApp();
@@ -92,7 +85,7 @@ class CareerJetUSACrawler extends Crawler {
         crawledAt: new Date().getTime(),
         announcedAt: announceDate,
         description: content,
-        platform: PLATFORM,
+        platform: this.platform,
         company: companyId,
         link: pageLink,
       });
@@ -104,7 +97,7 @@ class CareerJetUSACrawler extends Crawler {
 
       console.log("done !");
       await browser.close();
-      return true;
+      return jobAvd
     } catch (error) {
       // revert db records
       console.error("something went wrong");
@@ -112,7 +105,7 @@ class CareerJetUSACrawler extends Crawler {
       resume.objects.findByIdAndRemove(resumeId);
       jobAdvert.objects.findByIdAndRemove(jobAdvertId);
       await browser.close();
-      return false;
+      return null;
     }
   };
 }

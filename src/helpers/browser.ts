@@ -1,4 +1,4 @@
-import puppeteer from "puppeteer";
+import puppeteer, { PuppeteerLaunchOptions } from "puppeteer";
 import env from "../constants/env";
 
 const linuxChromiumExecutablePath = "/usr/bin/chromium-browser";
@@ -11,12 +11,15 @@ const executablePath = env.isProd
 
 const args = env.isProd ? ["--no-sandbox", "--disable-setuid-sandbox"] : [];
 
-const createBrowser = async () => {
-  const browser = await puppeteer.launch({
-    executablePath: executablePath,
-    headless: true,
-    args: args,
-  });
+const defaultPuppeteerOptions: PuppeteerLaunchOptions = {
+  executablePath: executablePath,
+  headless: true,
+  args: args,
+};
+
+const createBrowser = async (options?: PuppeteerLaunchOptions) => {
+  const launchOptions = { ...defaultPuppeteerOptions, ...options };
+  const browser = await puppeteer.launch(launchOptions);
   return browser;
 };
 
