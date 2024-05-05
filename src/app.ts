@@ -10,7 +10,7 @@ const app = express();
 
 connectMongoDb();
 
-app.use("/crawl", crawlerRouter);
+app.use("/crawler", crawlerRouter);
 app.use("/jobAdvert", jobAdvertRouter);
 
 app.get("/trigger-indexing", (req, res) => {

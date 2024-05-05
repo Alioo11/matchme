@@ -43,7 +43,7 @@ class CareerJetCrawler extends Crawler {
   };
 
   crawlByIdentifier = async (identifier: string) => {
-    const browser = await createBrowser({headless:false});
+    const browser = await createBrowser();
     const pageLink = identifier;
     console.log("started scrapping ", pageLink);
 
