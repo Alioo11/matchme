@@ -3,7 +3,12 @@ import IRank from "../../types/rank";
 
 const rankMongoModel = new Schema<IRank>({
   compatibility: { type: Number, default: null },
-  jobAdvert: { type: Types.ObjectId, ref: "jobAdvert", required: true },
+  jobAdvert: {
+    type: Types.ObjectId,
+    ref: "jobAdvert",
+    required: true,
+    unique: true,
+  },
 });
 
 const RankModel = model("rank", rankMongoModel);
