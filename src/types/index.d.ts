@@ -1,2 +1,2 @@
-type visa_status = "yes" | "no" | "unknown";
+type visa_status = "true" | "false" | "unknown";
 type platform = "io-consultancy";

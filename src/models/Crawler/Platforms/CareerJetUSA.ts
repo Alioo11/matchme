@@ -6,6 +6,7 @@ import ResumeApp from "../../Resume";
 import calculateDateFromText from "../../../helpers/calculateDateFromText";
 import createBrowser from "../../../helpers/browser";
 import JobAdvertIndexApp from "../../../models/JobAdvertIndex";
+import JobAdvertHelper from "../../../helpers/jobAdvert";
 
 const BASE_URL = "https://www.careerjet.com";
 const PLATFORM = "career-jet-(USA)";
@@ -40,7 +41,6 @@ class CareerJetUSACrawler extends Crawler {
     for (let i = 0; i < filteredArray.length; i++) {
       await jobAdvertIndex.create(`${BASE_URL}${filteredArray[i]}`, this.platform);
     }
-
   };
 
   crawlByIdentifier = async (identifier: string) => {
@@ -80,6 +80,8 @@ class CareerJetUSACrawler extends Crawler {
       const announceDate = calculateDateFromText(announceDateAsText || "");
 
       companyId = await company.getOrCreate(companyName);
+      const skills = JobAdvertHelper.extractSkillsFromJobDescription(content || "");
+      const yearsOfExperience = JobAdvertHelper.extractYearsOfExperinceFromJobDescription(content || "");
 
       const jobAvd = new jobAdvert.objects({
         crawledAt: new Date().getTime(),
@@ -88,6 +90,8 @@ class CareerJetUSACrawler extends Crawler {
         platform: this.platform,
         company: companyId,
         link: pageLink,
+        skills: skills,
+        experience: yearsOfExperience
       });
 
       jobAdvertId = jobAvd._id;

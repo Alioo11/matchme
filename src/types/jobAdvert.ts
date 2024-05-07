@@ -6,9 +6,11 @@ interface IJobAdvert {
   announcedAt: number;
   link: string;
   description: string;
-  lastApply: Nullable<number>;
+  lastApply: Nullable<Date>;
   platform: String;
   company: ICompany;
+  skills: Array<string>;
+  experience: Nullable<number>;
 }
 
 export default IJobAdvert;
