@@ -8,7 +8,7 @@ interface IJobAdvert {
   description: string;
   lastApply: Nullable<Date>;
   platform: String;
-  company: ICompany;
+  company: Nullable<ICompany>;
   skills: Array<string>;
   experience: Nullable<number>;
 }

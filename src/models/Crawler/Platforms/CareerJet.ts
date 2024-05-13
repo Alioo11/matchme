@@ -60,12 +60,19 @@ class CareerJetCrawler extends Crawler {
     try {
       await page.goto(pageLink);
 
-      // create company
-      const companyTitleElement = await page.waitForSelector(".company");
-      const companyName = await companyTitleElement?.evaluate(
-        (element) => element.innerHTML
-      )!;
+      let companyName = null;
 
+
+      try {
+        const companyTitleElement = await page.waitForSelector(".company", {
+          timeout: 10000,
+        });
+        companyName = await companyTitleElement?.evaluate(
+          (element) => element.innerHTML
+        )!;
+      } catch (error) {
+        console.log("could not find company name!");
+      }
       // create jobAdvert
       const companyContentElement = await page.waitForSelector(".content");
       const content = await companyContentElement?.evaluate(
@@ -105,10 +112,29 @@ class CareerJetCrawler extends Crawler {
       return jobAvd;
     } catch (error) {
       // revert db records
-      console.error("something went wrong");
+      console.error(
+        `failed to scrap ${pageLink} \nreverting db operations \nreason`
+      );
       console.error(error);
       resume.objects.findByIdAndRemove(resumeId);
       jobAdvert.objects.findByIdAndRemove(jobAdvertId);
+      try {
+        const jobAdvertIndex = new JobAdvertIndexApp()
+        await page.goto(pageLink);
+        const title = await page.waitForSelector(".title",{timeout:5000});
+        const isExpired = await title?.evaluate((element) =>
+          element.textContent?.includes("expired")
+        )!;
+
+        if(isExpired){
+          await jobAdvertIndex.objects.findOneAndRemove({link:pageLink});
+          console.log("remove jovIndex");
+        }
+
+      } catch (err) {
+        console.log("error in error");
+      }
+
       await browser.close();
       return null;
     }

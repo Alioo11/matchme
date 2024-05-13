@@ -23,9 +23,10 @@ class RankApp extends AppModel<IRank> {
     const jobAdvert = await jobAdvertAp.objects.findById(rank.jobAdvert);
     if (!jobAdvert) return false;
 
-    const jobAdvertIndex = await jobAdvertIndexAp.objects
-      .findOne({ jobAdvert: jobAdvert.id })
-    const company = await companyAp.objects.findById(jobAdvert.company)
+    const jobAdvertIndex = await jobAdvertIndexAp.objects.findOne({
+      jobAdvert: jobAdvert.id,
+    });
+    const company = await companyAp.objects.findById(jobAdvert.company);
 
     if (!company || !jobAdvertIndex) return false;
 
@@ -49,9 +50,10 @@ class RankApp extends AppModel<IRank> {
     const jobAdvert = await jobAdvertAp.objects.findById(jobAdvertId);
     if (!jobAdvert) return false;
 
-    const jobAdvertIndex = await jobAdvertIndexAp.objects
-      .findOne({ jobAdvert: jobAdvert.id })
-    const company = await companyAp.objects.findById(jobAdvert.company)
+    const jobAdvertIndex = await jobAdvertIndexAp.objects.findOne({
+      jobAdvert: jobAdvert.id,
+    });
+    const company = await companyAp.objects.findById(jobAdvert.company);
 
     if (!company || !jobAdvertIndex) return false;
 
@@ -83,6 +85,19 @@ class RankApp extends AppModel<IRank> {
     for (let i = 0; i < rankings.length; i++) {
       await this.updateJobAdvertRanking(rankings[i]._id);
     }
+  };
+
+  public getRanking = async (page: number, pageSize: number) => {
+    const ranking = await this.objects
+      .find({}, "-_id -__v")
+      .sort({ compatibility: 1 })
+      .skip(page * pageSize)
+      .limit(pageSize)
+      .populate({
+        path: "jobAdvert",
+        populate: { path: "company", model: "company" },
+      });
+    return ranking;
   };
 }
 

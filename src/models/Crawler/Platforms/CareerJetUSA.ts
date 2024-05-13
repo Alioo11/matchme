@@ -39,7 +39,10 @@ class CareerJetUSACrawler extends Crawler {
     console.log(`found ${filteredArray.length} jobs !`);
 
     for (let i = 0; i < filteredArray.length; i++) {
-      await jobAdvertIndex.create(`${BASE_URL}${filteredArray[i]}`, this.platform);
+      await jobAdvertIndex.create(
+        `${BASE_URL}${filteredArray[i]}`,
+        this.platform
+      );
     }
   };
 
@@ -57,14 +60,25 @@ class CareerJetUSACrawler extends Crawler {
     let jobAdvertId = null;
 
     const page = await browser.newPage();
+    await page.setUserAgent(
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36"
+    );
     try {
       await page.goto(pageLink);
 
+      let companyName = null;
+
       // create company
-      const companyTitleElement = await page.waitForSelector(".company");
-      const companyName = await companyTitleElement?.evaluate(
-        (element) => element.innerHTML
-      )!;
+      try {
+        const companyTitleElement = await page.waitForSelector(".company", {
+          timeout: 10000,
+        });
+        companyName = await companyTitleElement?.evaluate(
+          (element) => element.innerHTML
+        )!;
+      } catch (error) {
+        console.log("could not find company name!");
+      }
 
       // create jobAdvert
       const companyContentElement = await page.waitForSelector(".content");
@@ -80,8 +94,13 @@ class CareerJetUSACrawler extends Crawler {
       const announceDate = calculateDateFromText(announceDateAsText || "");
 
       companyId = await company.getOrCreate(companyName);
-      const skills = JobAdvertHelper.extractSkillsFromJobDescription(content || "");
-      const yearsOfExperience = JobAdvertHelper.extractYearsOfExperinceFromJobDescription(content || "");
+      const skills = JobAdvertHelper.extractSkillsFromJobDescription(
+        content || ""
+      );
+      const yearsOfExperience =
+        JobAdvertHelper.extractYearsOfExperinceFromJobDescription(
+          content || ""
+        );
 
       const jobAvd = new jobAdvert.objects({
         crawledAt: new Date().getTime(),
@@ -91,7 +110,7 @@ class CareerJetUSACrawler extends Crawler {
         company: companyId,
         link: pageLink,
         skills: skills,
-        experience: yearsOfExperience
+        experience: yearsOfExperience,
       });
 
       jobAdvertId = jobAvd._id;
@@ -101,13 +120,32 @@ class CareerJetUSACrawler extends Crawler {
 
       console.log("done !");
       await browser.close();
-      return jobAvd
+      return jobAvd;
     } catch (error) {
       // revert db records
-      console.error("something went wrong");
+      console.error(
+        `failed to scrap ${pageLink} \nreverting db operations \nreason`
+      );
       console.error(error);
       resume.objects.findByIdAndRemove(resumeId);
       jobAdvert.objects.findByIdAndRemove(jobAdvertId);
+      try {
+        const jobAdvertIndex = new JobAdvertIndexApp()
+        await page.goto(pageLink);
+        const title = await page.waitForSelector(".title",{timeout:5000});
+        const isExpired = await title?.evaluate((element) =>
+          element.textContent?.includes("expired")
+        )!;
+
+        if(isExpired){
+          await jobAdvertIndex.objects.findOneAndRemove({link:pageLink});
+          console.log("remove jovIndex");
+        }
+
+      } catch (err) {
+        console.log("error in error");
+      }
+
       await browser.close();
       return null;
     }

@@ -15,14 +15,27 @@ class JobAdvertApp extends AppModel<IJobAdvert> {
     return foundedResume;
   };
 
-  getUnRankedJobAdverts = async (limit:number)=> {
+  getUnRankedJobAdverts = async (limit: number) => {
     const rank = new RankApp();
     //@ts-ignore
-    const rankedJobAdvertIds = new Set((await rank.objects.find({}).exec()).map(item => item.jobAdvert.toString()))
-    const unRankedJobAdverts = (await this.objects.find({}).exec()).filter(item => !rankedJobAdvertIds.has(item.id));
-    if (unRankedJobAdverts.length > limit) return unRankedJobAdverts.slice(0,limit)
-    return unRankedJobAdverts
-  }
+    const rankedJobAdvertIds = new Set(
+      (await rank.objects.find({}).exec()).map((item) =>
+        item.jobAdvert.toString()
+      )
+    );
+    const unRankedJobAdverts = (await this.objects.find({}).exec()).filter(
+      (item) => !rankedJobAdvertIds.has(item.id)
+    );
+    if (unRankedJobAdverts.length > limit)
+      return unRankedJobAdverts.slice(0, limit);
+    return unRankedJobAdverts;
+  };
+
+  applyForJobAdvert = async (jobAdvertId:string) => {
+    const now = new Date();
+    const result = await this.objects.findByIdAndUpdate(jobAdvertId, {$set :{lastApply:now}})
+    return result;
+  };
 }
 
 export default JobAdvertApp;

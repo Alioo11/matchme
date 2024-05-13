@@ -7,14 +7,16 @@ type rankingCriterion = (jobAdvertIndex: IJobAdvertIndex) => number;
 const LAST_APPLY_DURATION_EFFECTIVE_RANGE_IN_DAYS = 30;
 const BEST_EXPERIENCE_MATCH_IN_YEARS = 3;
 
-const LAST_APPLY_EFFECT = 10;
-const VISA_SPONSORSHIP_EFFECT = 8;
-const SKILL_MATCH_EFFECT = 2;
-const EXPERIENCE_MATCH = 5;
+const LAST_APPLY_EFFECT = 1000;
+const VISA_SPONSORSHIP_EFFECT = 10;
+const SKILL_MATCH_EFFECT = 1;
+const EXPERIENCE_MATCH = 100;
+const ANNOUNCE_DATE = 100;
 
 class RankHelper {
   private static rankLastApply: rankingCriterion = (jobAdvertIndex) => {
-    const lastApplyDate = jobAdvertIndex.jobAdvert?.lastApply || null;
+    //@ts-ignore 
+    const lastApplyDate = jobAdvertIndex.jobAdvert?._doc?.lastApply || null;
     if (lastApplyDate === null) return 0;
     const now = moment();
     const daysPastSinceLastApply = now.diff(lastApplyDate, "days");
@@ -26,9 +28,18 @@ class RankHelper {
     return LAST_APPLY_EFFECT * diff;
   };
 
+  private static rankByAnnounceDate : rankingCriterion = (jobAdvertIndex)=>{
+    //@ts-ignore
+    const announceDate = jobAdvertIndex.jobAdvert?._doc?.announcedAt || null;
+    if (announceDate === null) return 0;
+    const now = moment();
+    const daysPastSinceLastApply = now.diff(announceDate, "days");
+    return daysPastSinceLastApply * ANNOUNCE_DATE;
+  }
+
   private static rankVisaSponsorship: rankingCriterion = (jobAdvertIndex) => {
     const visaSponsorShiptStatus =
-      jobAdvertIndex.jobAdvert?.company.visa || null;
+      jobAdvertIndex.jobAdvert?.company?.visa || null;
     if (visaSponsorShiptStatus === null) return VISA_SPONSORSHIP_EFFECT;
     if (visaSponsorShiptStatus === "false") return 2 * VISA_SPONSORSHIP_EFFECT;
     return 0;
@@ -64,6 +75,7 @@ class RankHelper {
       this.rankVisaSponsorship,
       this.rankSkillMatch,
       this.rankExperienceMatch,
+      this.rankByAnnounceDate
     ];
 
     const ranking = rankingCriterions.map((fn) => fn(jobAdvertIndex));
