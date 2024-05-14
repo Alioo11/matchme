@@ -73,17 +73,13 @@ class CareerJetCrawler extends Crawler {
       } catch (error) {
         console.log("could not find company name!");
       }
-      // create jobAdvert
-      const companyContentElement = await page.waitForSelector(".content");
-      const content = await companyContentElement?.evaluate(
-        (element) => element.textContent
-      )!;
+      await page.waitForSelector('.content , .tags');
 
-      // announcement-date
-      const companyAnnounceDateElement = await page.waitForSelector(".tags");
-      const announceDateAsText = await companyAnnounceDateElement?.evaluate(
-        (element) => element.textContent
-      )!;
+      const [,header] = await page.$$("header");
+      const jobTitle = await header?.evaluate(e => e.children[1].textContent);
+
+      const [announceDateAsText,content] = await page.$$eval('.content , .tags', elements => elements.map(element => element.textContent));
+
       const announceDate = calculateDateFromText(announceDateAsText || "");
 
       companyId = await company.getOrCreate(companyName);
@@ -95,6 +91,7 @@ class CareerJetCrawler extends Crawler {
         crawledAt: new Date().getTime(),
         announcedAt: announceDate,
         description: content,
+        jobTitle: jobTitle,
         platform: PLATFORM,
         company: companyId,
         link: pageLink,

@@ -11,6 +11,7 @@ const JobAdvertMongoModel = new Schema<IJobAdvert>({
   company: { type: Types.ObjectId, ref: "company", default: null },
   skills: { type: [String], default: [] },
   experience: { type: Number, default: null },
+  jobTitle: { type: String, default: null },
 });
 
 const JobAdvertModel = model("jobAdvert", JobAdvertMongoModel);

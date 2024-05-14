@@ -5,6 +5,7 @@ interface IJobAdvert {
   crawledAt: number;
   announcedAt: number;
   link: string;
+  jobTitle: Nullable<string>;
   description: string;
   lastApply: Nullable<Date>;
   platform: String;
