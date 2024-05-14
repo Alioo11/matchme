@@ -4,6 +4,6 @@ import RankController from "./controller";
 const rankRouter = express.Router();
 
 rankRouter.get("/", RankController.getBest);
-rankRouter.post("/trigger", RankController.trigger);
+rankRouter.get("/trigger", RankController.trigger);
 
 export default rankRouter;

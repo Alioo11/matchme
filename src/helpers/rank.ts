@@ -2,20 +2,34 @@ import moment from "moment";
 import mySkills from "../constants/mySkills";
 import IJobAdvertIndex from "../types/jobAdvertIndex";
 
+import { frontendKeywords } from "../constants/rank";
+
 type rankingCriterion = (jobAdvertIndex: IJobAdvertIndex) => number;
 
 const LAST_APPLY_DURATION_EFFECTIVE_RANGE_IN_DAYS = 30;
 const BEST_EXPERIENCE_MATCH_IN_YEARS = 3;
 
 const LAST_APPLY_EFFECT = 1000;
+const JOB_TITLE = 100;
 const VISA_SPONSORSHIP_EFFECT = 10;
 const SKILL_MATCH_EFFECT = 1;
 const EXPERIENCE_MATCH = 100;
 const ANNOUNCE_DATE = 100;
 
 class RankHelper {
+  private static rankJobTitle: rankingCriterion = (jobAdvertIndex) => {
+    //@ts-ignore
+    const jobTitle = jobAdvertIndex.jobAdvert?._doc?.jobTitle || null;
+    if (jobTitle === null) return JOB_TITLE;
+    const hasFrontendKeyword = frontendKeywords.some((keyword) =>
+      jobTitle.includes(keyword)
+    );
+    if (hasFrontendKeyword) return 0;
+    return JOB_TITLE * 2;
+  };
+
   private static rankLastApply: rankingCriterion = (jobAdvertIndex) => {
-    //@ts-ignore 
+    //@ts-ignore
     const lastApplyDate = jobAdvertIndex.jobAdvert?._doc?.lastApply || null;
     if (lastApplyDate === null) return 0;
     const now = moment();
@@ -28,14 +42,14 @@ class RankHelper {
     return LAST_APPLY_EFFECT * diff;
   };
 
-  private static rankByAnnounceDate : rankingCriterion = (jobAdvertIndex)=>{
+  private static rankByAnnounceDate: rankingCriterion = (jobAdvertIndex) => {
     //@ts-ignore
     const announceDate = jobAdvertIndex.jobAdvert?._doc?.announcedAt || null;
     if (announceDate === null) return 0;
     const now = moment();
     const daysPastSinceLastApply = now.diff(announceDate, "days");
     return daysPastSinceLastApply * ANNOUNCE_DATE;
-  }
+  };
 
   private static rankVisaSponsorship: rankingCriterion = (jobAdvertIndex) => {
     const visaSponsorShiptStatus =
@@ -75,7 +89,8 @@ class RankHelper {
       this.rankVisaSponsorship,
       this.rankSkillMatch,
       this.rankExperienceMatch,
-      this.rankByAnnounceDate
+      this.rankByAnnounceDate,
+      this.rankJobTitle,
     ];
 
     const ranking = rankingCriterions.map((fn) => fn(jobAdvertIndex));

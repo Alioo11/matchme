@@ -55,7 +55,7 @@ class RankApp extends AppModel<IRank> {
     });
     const company = await companyAp.objects.findById(jobAdvert.company);
 
-    if (!company || !jobAdvertIndex) return false;
+    if (!jobAdvertIndex) return false;
 
     const jobAdvertData: IJobAdvert = { ...jobAdvert, company: company };
 
