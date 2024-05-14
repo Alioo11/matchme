@@ -144,6 +144,7 @@ class CareerJetUSACrawler extends Crawler {
 
       } catch (err) {
         console.log("error in error");
+        return null
       }
 
       await browser.close();
