@@ -64,7 +64,7 @@ class CareerJetUSACrawler extends Crawler {
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36"
     );
     try {
-      await page.goto(pageLink);
+      await page.goto(pageLink, { timeout: 10000 });
 
       let companyName = null;
 
@@ -120,12 +120,19 @@ class CareerJetUSACrawler extends Crawler {
       return jobAvd;
     } catch (error) {
       // revert db records
-      console.error(
-        `failed to scrap ${pageLink} \nreverting db operations \nreason`
-      );
+      // revert db records
+      console.error(`failed to scrap ${pageLink}\n \nreverting db operations \n \nreason:`);
       console.error(error);
-      resume.objects.findByIdAndRemove(resumeId);
-      jobAdvert.objects.findByIdAndRemove(jobAdvertId);
+      if(resumeId){
+        console.log('removing resume' , resumeId)
+        await resume.objects.findByIdAndRemove(resumeId);
+        console.log('resume removed')
+      }
+      if(jobAdvertId){
+        console.log('removing jobAdvert' , jobAdvertId)
+        await jobAdvert.objects.findByIdAndRemove(jobAdvertId);
+        console.log('jobAdvert removed')
+      }
       try {
         const jobAdvertIndex = new JobAdvertIndexApp()
         await page.goto(pageLink);
@@ -138,14 +145,14 @@ class CareerJetUSACrawler extends Crawler {
           await jobAdvertIndex.objects.findOneAndRemove({link:pageLink});
           console.log("remove jovIndex");
         }
+        browser.close();
+        return null
 
       } catch (err) {
         console.log("error in error");
+        browser.close();
         return null
       }
-
-      await browser.close();
-      return null;
     }
   };
 }

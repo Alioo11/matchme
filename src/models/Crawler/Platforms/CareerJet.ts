@@ -58,10 +58,9 @@ class CareerJetCrawler extends Crawler {
 
     const page = await browser.newPage();
     try {
-      await page.goto(pageLink);
+      await page.goto(pageLink, {timeout:10000});
 
       let companyName = null;
-
 
       try {
         const companyTitleElement = await page.waitForSelector(".company", {
@@ -109,12 +108,18 @@ class CareerJetCrawler extends Crawler {
       return jobAvd;
     } catch (error) {
       // revert db records
-      console.error(
-        `failed to scrap ${pageLink} \nreverting db operations \nreason`
-      );
+      console.error(`failed to scrap ${pageLink}\n \nreverting db operations \n \nreason:`);
       console.error(error);
-      resume.objects.findByIdAndRemove(resumeId);
-      jobAdvert.objects.findByIdAndRemove(jobAdvertId);
+      if(resumeId){
+        console.log('removing resume' , resumeId)
+        await resume.objects.findByIdAndRemove(resumeId);
+        console.log('resume removed')
+      }
+      if(jobAdvertId){
+        console.log('removing jobAdvert' , jobAdvertId)
+        await jobAdvert.objects.findByIdAndRemove(jobAdvertId);
+        console.log('jobAdvert removed')
+      }
       try {
         const jobAdvertIndex = new JobAdvertIndexApp()
         await page.goto(pageLink);
@@ -127,14 +132,14 @@ class CareerJetCrawler extends Crawler {
           await jobAdvertIndex.objects.findOneAndRemove({link:pageLink});
           console.log("remove jovIndex");
         }
+        browser.close();
+        return null;
 
       } catch (err) {
         console.log("error in error");
-        return null
+        await browser.close();
+        return null;
       }
-
-      await browser.close();
-      return null;
     }
   };
 }
