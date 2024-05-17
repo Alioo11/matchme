@@ -6,6 +6,7 @@ interface IJobAdvertIndex {
   jobAdvert: Nullable<IJobAdvert>;
   crawlerIdentifier: string;
   crawlerPlatform: string;
+  timesFailedToScrap: number;
 }
 
 export default IJobAdvertIndex;

@@ -10,7 +10,7 @@ class JobAdvertHelper {
     return foundSkills;
   };
 
-  static extractYearsOfExperinceFromJobDescription = (description: string) => {
+  static extractYearsOfExperienceFromJobDescription = (description: string) => {
     const searchWords = ["experience", "year", "years"];
 
     for (const word of searchWords) {

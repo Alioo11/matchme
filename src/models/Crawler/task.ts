@@ -1,21 +1,16 @@
-import CareerJetCrawler from "./Platforms/CareerJet";
 import Crawler from ".";
+import EuropeCareerjetScrapper from "../Scrapper/Platform/EuropeCareerjet";
 
 class CrawlerTask {
-  static crawlers: Crawler[] = [new CareerJetCrawler()];
+  static crawler = new Crawler([new EuropeCareerjetScrapper()]);
 
   static startIndexing = async (limit: number) => {
-    for (let i = 0; i < this.crawlers.length; i++) {
-      await this.crawlers[i].startIndexing(limit);
-    }
+    this.crawler.startIndexing(limit);
   };
 
   static startCrawling = async (limit: number) => {
-    console.log("crawler starting ...");
-    for (let i = 0; i < this.crawlers.length; i++) {
-      await this.crawlers[i].startCrawling(limit);
-    }
-  };
+    this.crawler.startCrawling(limit);
+  }
 }
 
 export default CrawlerTask;

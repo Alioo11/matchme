@@ -84,7 +84,7 @@ class CareerJetCrawler extends Crawler {
       companyId = await company.getOrCreate(companyName);
 
       const skills = JobAdvertHelper.extractSkillsFromJobDescription(content || "");
-      const yearsOfExperience = JobAdvertHelper.extractYearsOfExperinceFromJobDescription(content || "");
+      const yearsOfExperience = JobAdvertHelper.extractYearsOfExperienceFromJobDescription(content || "");
 
       const jobAvd = new jobAdvert.objects({
         crawledAt: new Date().getTime(),

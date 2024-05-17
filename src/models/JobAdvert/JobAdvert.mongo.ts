@@ -1,5 +1,5 @@
 import { Schema, model, Types } from "mongoose";
-import IJobAdvert from "src/types/jobAdvert";
+import IJobAdvert from "../../types/jobAdvert";
 
 const JobAdvertMongoModel = new Schema<IJobAdvert>({
   crawledAt: { type: Number, required: true },
