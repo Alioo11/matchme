@@ -8,7 +8,10 @@ class JobAdvertIndexApp extends AppModel<IJobAdvertIndex> {
   objects = JobAdvertIndexModel;
 
   getUnIndexed = async (platform: platform, limit: number = 20) => {
-    return await this.objects.find({ crawledAt: null, crawlerPlatform: platform }).limit(limit);
+    return await this.objects
+      .find({ crawledAt: null, crawlerPlatform: platform })
+      .sort({ timesFailedToScrap: 1 })
+      .limit(limit);
   };
 
   create = async (identifier: IJobAdvertIndex["crawlerIdentifier"], platform: platform) => {
