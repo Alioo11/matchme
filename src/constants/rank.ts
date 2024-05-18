@@ -1,1 +1,1 @@
-export const frontendKeywords = [, "frontend", "front-end", "front end"];
+export const frontendKeywords = ["frontend", "front-end", "front end"];
