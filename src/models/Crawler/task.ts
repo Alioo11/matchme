@@ -1,8 +1,9 @@
 import Crawler from ".";
 import EuropeCareerjetScrapper from "../Scrapper/Platform/EuropeCareerjet";
+import USACareerjetScrapper from "../Scrapper/Platform/USACareerjet";
 
 class CrawlerTask {
-  static crawler = new Crawler([new EuropeCareerjetScrapper()]);
+  static crawler = new Crawler([new EuropeCareerjetScrapper(), new USACareerjetScrapper()]);
 
   static startIndexing = async (limit: number) => {
     this.crawler.startIndexing(limit);
