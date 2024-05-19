@@ -12,6 +12,7 @@ const JobAdvertMongoModel = new Schema<IJobAdvert>({
   skills: { type: [String], default: [] },
   experience: { type: Number, default: null },
   jobTitle: { type: String, default: null },
+  relative: { type: Boolean, default: true },
 });
 
 const JobAdvertModel = model("jobAdvert", JobAdvertMongoModel);

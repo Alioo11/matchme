@@ -12,6 +12,7 @@ interface IJobAdvert {
   company: Nullable<ICompany>;
   skills: Array<string>;
   experience: Nullable<number>;
+  relative: boolean
 }
 
 export default IJobAdvert;

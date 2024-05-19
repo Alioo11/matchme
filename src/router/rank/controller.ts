@@ -18,12 +18,12 @@ class RankController {
 
   static trigger: httpHandler = async (req, res) => {
     try {
-      if (req.method !== "POST") return res.status(400).send("bad request");
-      await this.ranking.updateRankings(10000)
-      await this.ranking.rankUnRankedJobAdverts(500)
+      await this.ranking.updateRankings(3000)
+      await this.ranking.rankUnRankedJobAdverts(1000)
       return res.send(200).json({message:"doing it "})
     } catch (error) {
-      return res.send(500);
+      console.log(error)
+      return res.status(500).json(error);
     }
   };
 
