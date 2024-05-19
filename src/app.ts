@@ -9,6 +9,7 @@ import env from "./constants/env";
 import RankTask from "./models/Rank/task";
 import cron from 'node-cron';
 import CrawlerTask from "./models/Crawler/task";
+import bodyParser from "body-parser";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use("/jobAdvert", jobAdvertRouter); /** deprecated */
 app.use("/rank", rankRouter); /** deprecated */
 
 app.use(cors());
+app.use(bodyParser.json());
 
 app.use("/api", rootRouter);
 
