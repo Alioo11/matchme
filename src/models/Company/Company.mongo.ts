@@ -5,6 +5,7 @@ const CompanyMongoModel = new Schema<ICompany>({
   title: { type: String, required: true, unique: true },
   location: { type: String, required: false, default: null },
   visa: { type: String, required: false, default: null },
+  linkedInURL: { type: String, default: null },
 });
 
 const CompanyModel = model("company", CompanyMongoModel);
