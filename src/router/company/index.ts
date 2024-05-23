@@ -1,10 +1,12 @@
 import express from "express";
 import companyController from "./controller";
 
-const companyRouter = express.Router();
+const CompanyRouter = express.Router();
 
-companyRouter.get("/get-linkedin", companyController.getLinkedinURLs);
-companyRouter.get("/get-linkedin-users", companyController.getLinkedinCompanyUsers);
+CompanyRouter.get("/get-linkedin", companyController.getLinkedinURLs);
+CompanyRouter.get("/get-linkedin-users", companyController.getLinkedinCompanyUsers);
+CompanyRouter.get("/get-linkedin-users", companyController.letsTestSomething);
 
 
-export default companyRouter;
+
+export default CompanyRouter;

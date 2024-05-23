@@ -1,4 +1,4 @@
-import { Schema, model, Types } from "mongoose";
+import { Schema, model } from "mongoose";
 import ICompany from "../../types/company";
 
 const CompanyMongoModel = new Schema<ICompany>({
@@ -6,6 +6,7 @@ const CompanyMongoModel = new Schema<ICompany>({
   location: { type: String, required: false, default: null },
   visa: { type: String, required: false, default: null },
   linkedInURL: { type: String, default: null },
+  employeesCount: { type: Number, default: 0 },
 });
 
 const CompanyModel = model("company", CompanyMongoModel);

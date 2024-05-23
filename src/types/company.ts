@@ -6,6 +6,7 @@ interface ICompany {
   title: Nullable<string>;
   visa: Nullable<visa_status>;
   linkedInURL: Nullable<string>;
+  employeesCount: number;
 }
 
 export default ICompany;
