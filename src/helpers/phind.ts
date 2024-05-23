@@ -1,5 +1,6 @@
 import wait from "../utils/wait";
 import createBrowser from "./browser";
+import useragent from 'random-useragent';
 
 const PHIND_URL = "https://www.phind.com/search?home=true";
 class PhindScrapper {
@@ -9,7 +10,7 @@ class PhindScrapper {
     try{
     const browser = await this.createBrowser({headless: true,args: ["--no-sandbox", "--disable-setuid-sandbox"]});
     const page = await browser.newPage();
-    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36');
+    await page.setUserAgent(useragent.getRandom());
     await page.goto(PHIND_URL, { waitUntil: "networkidle2" });
     await page.waitForSelector(".searchbox-textarea");
     await page.type(".searchbox-textarea", request.replace(/\n/g, ' '));

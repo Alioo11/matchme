@@ -6,6 +6,7 @@ import wait from "../../../utils/wait";
 import console from "../../../helpers/console";
 import calculateDateFromText from "../../../helpers/calculateDateFromText";
 import JobAdvertHelper from "../../../helpers/jobAdvert";
+import useragent from 'random-useragent';
 
 class USACareerjetScrapper implements IScrapper {
   platform: platform = "career-jet-(USA)";
@@ -50,9 +51,7 @@ class USACareerjetScrapper implements IScrapper {
     const page = await browser.newPage();
     try {
       console.magenta(identifier);
-      await page.setUserAgent(
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36"
-      );
+      await page.setUserAgent(useragent.getRandom());
       await page.goto(identifier, { timeout: 60000, waitUntil: "networkidle0" });
       let companyTitle = null;
       try {
