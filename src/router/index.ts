@@ -1,14 +1,14 @@
 import express from "express";
-import rankRouter from "./rank";
-import jobAdvertRouter from "./jobadvert";
+import RankRouter from "./rank";
+import JobAdvertRouter from "./jobadvert";
 import CrawlerRouter from "./crawler";
-import companyRouter from "./company";
+import CompanyRouter from "./company";
 
 const rootRouter = express.Router();
 
-rootRouter.use("/rank", rankRouter);
-rootRouter.use("/jobAdvert", jobAdvertRouter);
+rootRouter.use("/rank", RankRouter);
+rootRouter.use("/jobAdvert", JobAdvertRouter);
 rootRouter.use("/crawler", CrawlerRouter);
-rootRouter.use("/company", companyRouter);
+rootRouter.use("/company", CompanyRouter);
 
 export default rootRouter;

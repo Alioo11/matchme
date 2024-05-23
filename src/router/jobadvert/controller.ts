@@ -17,7 +17,10 @@ class JobAdvertController {
     }
   };
 
-  static removeUnattachedFromJobAdvertIndexes: httpHandler = async (req, res) => {
+  static removeUnattachedFromJobAdvertIndexes: httpHandler = async (
+    req,
+    res,
+  ) => {
     const jobAdvertIndexAp = new JobAdvertIndexApp();
     const jobAdverts = await this.jobAdvert.objects.find({});
     res.send(201);
@@ -32,7 +35,7 @@ class JobAdvertController {
       if (isUnattached) {
         await jobAdvertIndexAp.objects.findOneAndUpdate(
           { crawlerIdentifier: currentJobAdvert.link },
-          { $set: { crawledAt: new Date(), jobAdvert: currentJobAdvert.id } }
+          { $set: { crawledAt: new Date(), jobAdvert: currentJobAdvert.id } },
         );
       }
     }
@@ -55,8 +58,11 @@ class JobAdvertController {
   static retrieve: httpHandler = async (req, res) => {
     try {
       const jobAdvertId = req.params.id as string;
-      if (!isValidObjectId(jobAdvertId)) return res.status(400).json({ message: "invalid id" });
-      const searchedJobadvert = await this.jobAdvert.objects.findById(jobAdvertId).populate("company");
+      if (!isValidObjectId(jobAdvertId))
+        return res.status(400).json({ message: "invalid id" });
+      const searchedJobadvert = await this.jobAdvert.objects
+        .findById(jobAdvertId)
+        .populate("company");
       if (searchedJobadvert === null) return res.status(404);
       res.status(200).json(searchedJobadvert);
     } catch (error) {
@@ -67,7 +73,8 @@ class JobAdvertController {
   static delete: httpHandler = async (req, res) => {
     try {
       const jobAdvertId = req.params.id as string;
-      if (!isValidObjectId(jobAdvertId)) return res.status(400).json({ message: "invalid id" });
+      if (!isValidObjectId(jobAdvertId))
+        return res.status(400).json({ message: "invalid id" });
       await this.jobAdvert.hardDelete(jobAdvertId);
       res.send(200);
     } catch (error) {
@@ -79,18 +86,23 @@ class JobAdvertController {
     try {
       const jobAdvertId = req.params.id as string;
       const prompt = req.body.prompt as string;
-      if (!isValidObjectId(jobAdvertId)) return res.status(400).json({ message: "invalid id" });
-      if (!prompt) return res.status(400).json({ message: "prompt must be provided" });
-      const searchedJobadvert = await this.jobAdvert.objects.findById(jobAdvertId).populate("company");
+      if (!isValidObjectId(jobAdvertId))
+        return res.status(400).json({ message: "invalid id" });
+      if (!prompt)
+        return res.status(400).json({ message: "prompt must be provided" });
+      const searchedJobadvert = await this.jobAdvert.objects
+        .findById(jobAdvertId)
+        .populate("company");
       if (searchedJobadvert === null) return res.status(404);
       const jobDescription = searchedJobadvert.description || "";
       const scrapper = new PhindScrapper();
-      const promptRequest = `this is my resume ${RESUME_BASE_CONTENT} and this is the job i want to apply for ${jobDescription} according to provided info: ${prompt}`
+      const promptRequest = `this is my resume ${RESUME_BASE_CONTENT} and this is the job i want to apply for ${jobDescription} according to provided info: ${prompt}`;
       const promptResult = await scrapper.prompt(promptRequest);
-      if (!promptResult) return res.status(500).json({ message: "failed to prompt Phind" });
+      if (!promptResult)
+        return res.status(500).json({ message: "failed to prompt Phind" });
       res.status(200).json({ message: promptResult });
     } catch (error) {
-      console.log(error)
+      console.log(error);
       res.status(500);
     }
   };

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import env from "../constants/env";
+import Console from "./console";
 
 const connectMongoDb = async () => {
   try {
@@ -8,9 +9,10 @@ const connectMongoDb = async () => {
       pass: env.mongoPass,
       dbName: env.mongoDBName,
     });
-    console.log("@@ mongo database successfully connected @@");
+    Console.magenta("****************************************")
+    Console.green("@@-- mongodb connected successfully --@@");
   } catch (error) {
-    console.log("@@ connection to database failed @@");
+    Console.red("@@ connection to database failed @@");
     console.log(error);
   }
 };
