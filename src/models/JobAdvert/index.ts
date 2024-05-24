@@ -4,7 +4,6 @@ import IJobAdvert from "../../types/jobAdvert";
 import JobAdvertModel from "./JobAdvert.mongo";
 import ResumeApp from "../Resume";
 import RankApp from "../Rank";
-import IJobAdvertIndex from "../../types/jobAdvertIndex";
 import JobAdvertIndexApp from "../JobAdvertIndex";
 import Console from "../../helpers/console";
 
@@ -27,14 +26,14 @@ class JobAdvertApp extends AppModel<IJobAdvert> {
     return unRankedJobAdverts;
   };
 
-  hardDelete = async (identifier: IJobAdvertIndex["crawlerIdentifier"]) => {
+  hardDelete = async (id: string) => {
     const jobadvertIndexAp = new JobAdvertIndexApp();
     const rankAp = new RankApp();
     const resumeAp = new ResumeApp();
 
-    const jobadvert = await this.objects.findOne({ link: identifier });
+    const jobadvert = await this.objects.findById(id);
     if (jobadvert === null) {
-      Console.red(`@@- failed to find jobadvert while trying to find the jobadvert with identifier: ${identifier} -@@`);
+      Console.red(`@@- failed to find jobadvert while trying to find the jobadvert with identifier: ${id} -@@`);
       return null;
     }
 

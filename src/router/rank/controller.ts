@@ -8,8 +8,16 @@ class RankController {
     try {
       const [page, pageSize] = PaginationHelper.getPagination(req.query);
       if (req.method !== "GET") return res.status(400).send("bad request");
-      const result = await this.ranking.getRanking(page, pageSize);
-      return res.status(200).json(result);
+      const rankingTotalCount = await this.ranking.objects.countDocuments();
+      const rankingResult = await this.ranking.getRanking(page, pageSize);
+
+      const response = {
+        data: rankingResult,
+        page: page,
+        page_size: pageSize,
+        total: rankingTotalCount
+      }
+      return res.status(200).json(response);
     } catch (error) {
       console.log(error)
       res.send(500);

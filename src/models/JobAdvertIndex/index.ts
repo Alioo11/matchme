@@ -40,6 +40,22 @@ class JobAdvertIndexApp extends AppModel<IJobAdvertIndex> {
 
     return jobadvertIndex;
   };
+
+
+  removeFailedOnesBasedOnThreshold = async (threshold:number)=>{
+    const jobadvertIndexToRemoveCount = await this.objects.find({
+      jobAdvert: null,
+      timesFailedToScrap: { $gt: threshold },
+    });
+    Console.yellow(`attempting to remove ${jobadvertIndexToRemoveCount.length} jobadvert index`);
+    try{
+     await this.objects.deleteMany({timesFailedToScrap:{$gt:threshold}});
+     Console.green('successfully removed jobadvert indexes');
+    }catch(error){
+      Console.red('failed to remove jobadvert index \nreason:');
+      console.log(error);
+    }
+  }
 }
 
 export default JobAdvertIndexApp;

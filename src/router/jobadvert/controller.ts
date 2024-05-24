@@ -4,6 +4,7 @@ import JobAdvertIndexApp from "../../models/JobAdvertIndex";
 import { isValidObjectId } from "mongoose";
 import PhindScrapper from "../../helpers/phind";
 import RESUME_BASE_CONTENT from "../../constants/resume";
+import moment from "moment";
 
 class JobAdvertController {
   private static jobAdvert = new JobAdvertApp();
@@ -17,9 +18,64 @@ class JobAdvertController {
     }
   };
 
+  private static generateReport = async () => {
+    const pipeline = [
+      {
+        $match: {
+          lastApply: { $ne: null },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          lastApplyDay: {
+            $dateToString: {
+              format: "%Y-%m-%d",
+              date: "$lastApply",
+            },
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$lastApplyDay",
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { _id: 1 },
+      },
+    ];
+
+    //@ts-ignore
+    const dailyApplications = await this.jobAdvert.objects.aggregate(pipeline);
+    return dailyApplications;
+  };
+
+  static getJobadvertReport: httpHandler = async (req, res) => {
+    try{
+    const dailyReport = await this.generateReport();
+    const totalApplicationCount = (await this.jobAdvert.objects.find({ lastApply: { $ne: null } })).length 
+    const totalJobadvertCount = (await this.jobAdvert.objects.countDocuments());
+    res
+      .status(200)
+      .json({
+        jobadvert:{
+          total_number:totalJobadvertCount,
+        },
+        apply:{
+          total_number:totalApplicationCount,
+          daily_number:dailyReport
+        },
+      });
+    }catch(err){
+      res.status(500);
+    }
+  };
+
   static removeUnattachedFromJobAdvertIndexes: httpHandler = async (
     req,
-    res,
+    res
   ) => {
     const jobAdvertIndexAp = new JobAdvertIndexApp();
     const jobAdverts = await this.jobAdvert.objects.find({});
@@ -32,11 +88,13 @@ class JobAdvertController {
           jobAdvert: currentJobAdvert.id,
         })) === null;
 
+      console.log(i);
       if (isUnattached) {
-        await jobAdvertIndexAp.objects.findOneAndUpdate(
-          { crawlerIdentifier: currentJobAdvert.link },
-          { $set: { crawledAt: new Date(), jobAdvert: currentJobAdvert.id } },
-        );
+        console.log("shit", currentJobAdvert.id);
+        // await jobAdvertIndexAp.objects.findOneAndUpdate(
+        //   { crawlerIdentifier: currentJobAdvert.link },
+        //   { $set: { crawledAt: new Date(), jobAdvert: currentJobAdvert.id } },
+        // );
       }
     }
   };
