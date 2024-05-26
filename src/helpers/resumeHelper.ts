@@ -45,7 +45,7 @@ class ResumeHelper {
   }
 
   generatePDF = async (fileName:string) => {
-    const browser = await createBrowser({headless:false});
+    const browser = await createBrowser();
     try{
       const HTML_FILE_PATH = "static/template.html";
       const PDF_FILE_PATH = `/static/${fileName}.pdf`;

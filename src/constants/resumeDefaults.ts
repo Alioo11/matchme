@@ -6,7 +6,7 @@ const resumeTemplate = `<!DOCTYPE html>
     <title>Ali Salehi's Resume</title>
     <style>
         *{
-            font-size: 11px;
+            font-size: 12px;
         }
         p{
             margin-top: 1px;
@@ -64,7 +64,7 @@ const resumeTemplate = `<!DOCTYPE html>
 
         }
         .work-experience, .skills, .education {
-            margin-bottom: 20px;
+            margin-bottom: 0px;
         }
         .work-experience .job, .skills ul, .education p {
             margin-bottom: 10px;
@@ -83,7 +83,11 @@ const resumeTemplate = `<!DOCTYPE html>
             flex-wrap: wrap;
         }
         .skills ul li {
-            width: 50%;
+            width: 25%;
+        }
+        .section-subtitle {
+            display:flex;
+            justify-content: space-between;
         }
     </style>
 </head>
@@ -110,14 +114,18 @@ const resumeTemplate = `<!DOCTYPE html>
             <div class="work-experience">
                 <div class="job">
                     <p class="job-title">Front End Developer</p>
-                    <p class="grey"><strong>Idekavan Group - Tehrān</strong></p>
-                    <p class="grey">July 2022 to February 2024</p>
+                    <div class="section-subtitle">
+                        <p class="grey"><strong>Idekavan Group - Tehrān</strong></p>
+                        <p class="grey">July 2022 to February 2024</p>
+                    </div>
                     <ul id="idekavan-mentions"></ul>
                 </div>
                 <div class="job">
                     <p class="job-title">Front End Developer</p>
-                    <p class="grey"><strong>Nahira Tech - Tehran</strong></p>
-                    <p class="grey">July 2021 to February 2022</p>
+                    <div class="section-subtitle">
+                        <p class="grey"><strong>Nahira Tech - Tehran</strong></p>
+                        <p class="grey">July 2021 to February 2022</p>
+                    </div>
                     <ul id="nahira-mentions"></ul>
                 </div>
             </div>
@@ -134,17 +142,35 @@ const resumeTemplate = `<!DOCTYPE html>
 `;
 
 const summaryDefaultContent = `A frontend developer with 3 years of experience, specializing in web development using modern technologies like JavaScript, TypeScript, React, and Next.js, utilized in more than 7 different projects. Thriving on the challenge of tackling complex problems and delivering high-quality code and user experiences while constantly seeking opportunities to expand skill sets and stay updated with the latest industry trends.`;
-const defaultIdekavanMentions = [
+const oldDefaultIdekavanMentions = [
   "Built scalable development pipelines and workflows, resulting in a 2x acceleration in delivery speed and a 50% reduction in bugs and have delivery and quality balanced.",
   "Refactored project codebase, eliminating deprecated logic to achieve a more scalable and predictable flow, enhancing maintainability and performance.",
   "Authored comprehensive documentation outlining merge request standards and best practices, leading to improved quality of merge requests and reduced review time by 50%.",
   "Incorporated JSdoc and other documentation tools to document project components, resulting in enhanced readability and scalability.",
 ];
 
-const defaultNahiraMentions = [
+const defaultIdekavanMentions = [
+    "Implemented a CLI tool for project refactoring, reducing project refactoring effort by 40%, which increased team productivity and streamlined development processes.",
+    "Optimized Dockerfile to decrease container size by 50% and reduce build time failure rate by 30%, improving deployment efficiency and reliability.",
+    "Introduced Cypress testing for a CRM application, resulting in a 10% reduction in bug reports and significantly enhancing application stability and user satisfaction.",
+    "Authored comprehensive documentation outlining merge request standards and best practices, enhancing code quality and facilitating smoother team collaboration.",
+    "Consistently delivered product requirements while upholding high standards for software quality, ensuring the delivery of reliable and user-centric solutions.",
+    "Conducted A/B testing on the pricing page with SEO considerations, increasing user engagement by 20% and improving conversion rates."
+  ];
+
+const oldDefaultNahiraMentions = [
   "Engaged in contributing to the development of a healthcare platform, leveraging expertise in React, TypeScript, and GraphQL to enhance user experience and functionality while maintaining transparency and building strong client relationships, resulting in an 80% client satisfaction rate.",
   "Left after completing one project due to the limited growth prospects and the desire for professional advancement, transitioned to a new role with 50% higher responsibility.",
 ];
+
+
+const defaultNahiraMentions = [
+    "Leveraged experience with Next.js and TypeScript to optimize SEO for a healthcare platform, resulting in a 30% increase in organic traffic and improved search engine rankings.",
+    "Developed and maintained a real-time multiplayer game application using React and Socket.io, significantly improving user engagement and achieving a 20% increase in active user sessions.",
+    "Migrated application’s client API from REST to GraphQL, optimizing network traffic and reducing project complexity, resulting in faster data retrieval and streamlined development.",
+    "Implemented a business analytics dashboard using data visualization tools, leading to enhanced data insights, informed decision-making, and a 25% increase in operational efficiency.",
+    "Developed integration with third-party services, significantly expanding customer support capabilities and boosting user satisfaction by 30%."
+  ];
 
 export {
   resumeTemplate,

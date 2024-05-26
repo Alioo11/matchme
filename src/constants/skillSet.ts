@@ -33,6 +33,7 @@ skillsMap.set("puppeteer", 1);
 skillsMap.set("jest", 3);
 skillsMap.set("object oriented programming", 3);
 skillsMap.set("design patterns", 3);
+skillsMap.set("nginx", 2);
 skillsMap.set("data structures & algorithms", 3);
 
 const htmlSkill = new Skill("HTML", 3);

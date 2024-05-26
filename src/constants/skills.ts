@@ -48,6 +48,7 @@ const skills = [
   "ci/cd pipelines",
   "kubernetes",
   "senior frontend engineer",
+  "nginx",
   "reactjs",
   "nodejs",
   "aws",
