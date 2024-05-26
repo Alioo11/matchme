@@ -4,7 +4,7 @@ import JobAdvertIndexApp from "../../models/JobAdvertIndex";
 import { isValidObjectId } from "mongoose";
 import PhindScrapper from "../../helpers/phind";
 import RESUME_BASE_CONTENT from "../../constants/resume";
-import moment from "moment";
+import ResumeApp from "../../models/Resume";
 
 class JobAdvertController {
   private static jobAdvert = new JobAdvertApp();
@@ -127,6 +127,17 @@ class JobAdvertController {
       res.status(500);
     }
   };
+
+  static createResume: httpHandler = async (req, res) => {
+    const resumeAp = new ResumeApp();
+    try{
+      const jobAdvertId = req.params.id as string;
+      const path = await resumeAp.createResume(jobAdvertId)
+      res.status(200).json({link:path});
+    }catch(error){
+      res.status(500);
+    }
+  }
 
   static delete: httpHandler = async (req, res) => {
     try {

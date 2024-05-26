@@ -10,5 +10,6 @@ JobAdvertRouter.delete("/:id", JobAdvertController.delete);
 JobAdvertRouter.post("/:id/apply", JobAdvertController.apply);
 JobAdvertRouter.post("/:id/mark-as-unrelated", JobAdvertController.markAsUnrelated);
 JobAdvertRouter.post("/:id/prompt/with-context", JobAdvertController.promptWithContext);
+JobAdvertRouter.get("/:id/resume/create", JobAdvertController.createResume);
 
 export default JobAdvertRouter;

@@ -1,22 +1,17 @@
 import RankApp from "../../models/Rank";
 import { httpHandler } from "../../types";
-import PaginationHelper from "../../helpers/pagination";
+import Pagination from "../../helpers/pagination";
 
 class RankController {
   private static ranking = new RankApp();
   static getBest: httpHandler = async (req, res) => {
     try {
-      const [page, pageSize] = PaginationHelper.getPagination(req.query);
+      const pagination = new Pagination(req.query);
+      const [page, pageSize] = pagination.state;
       if (req.method !== "GET") return res.status(400).send("bad request");
       const rankingTotalCount = await this.ranking.objects.countDocuments();
       const rankingResult = await this.ranking.getRanking(page, pageSize);
-
-      const response = {
-        data: rankingResult,
-        page: page,
-        page_size: pageSize,
-        total: rankingTotalCount
-      }
+      const response = pagination.wrapIn(rankingResult , rankingTotalCount);
       return res.status(200).json(response);
     } catch (error) {
       console.log(error)

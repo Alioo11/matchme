@@ -195,6 +195,7 @@ const skills = [
   "php",
   "ecommerce projects",
   "cms",
+  "seo",
   "internationalized websites",
   "restful web services",
   "api design",
@@ -361,7 +362,6 @@ const skills = [
   "visual studio",
   "vs code",
   "jquery",
-  "material design",
   "bootstrap",
   "agile methodology",
   "vitest",
@@ -559,6 +559,10 @@ const skills = [
   "peer networking",
   "public speaking & presentations",
   "personal branding & online presence",
+  "material design",
+  "functional programming",
+  "puppeteer",
+  "data structures & algorithms",
 ];
 
-export default skills
+export default skills;

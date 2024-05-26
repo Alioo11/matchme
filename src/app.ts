@@ -17,6 +17,8 @@ connectMongoDb();
 app.use(cors());
 app.use(bodyParser.json());
 app.use("/api", rootRouter);
+app.use('/static', express.static('static'))
+
 
 Console.magenta("****************************************");
 Console.cyan("scheduling Tasks !");

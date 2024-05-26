@@ -3,13 +3,13 @@ import CompanyApp from "../../models/Company";
 import Console from "../../helpers/console";
 import LinkedinHelper from "../../helpers/linkedin";
 import UserApp from "../../models/User";
+import wait from "../../utils/wait";
 
 class companyController {
   private static company = new CompanyApp();
   static getLinkedinURLs: httpHandler = async (req, res) => {
     const limit = req.query.limit as string;
     const companiesWithVisaSponsorship = await this.company.objects.find({ visa: "true", linkedInURL: null });
-
     for (let i = 0; i < Number(limit) || 10; i++) {
       const currentCompany = companiesWithVisaSponsorship[i];
       const companyLinkedinURL = await this.company.getLinkedInUrl(currentCompany.id);
@@ -17,14 +17,31 @@ class companyController {
       Console.green(`found ${companyLinkedinURL}`);
       await currentCompany.update({ $set: { linkedInURL: companyLinkedinURL } });
     }
-
     res.send(200);
     try {
     } catch (error) {
       res.send(500);
     }
   };
-  
+
+
+  static checkCompaniesVisaSponsorShip: httpHandler = async (req, res) => {
+    const limit = req.query.limit as string;
+    const _limit = limit ? Number(limit) : 10
+    const company = new CompanyApp();
+    const uncheckedCompanies = await company.objects
+      .find({ visa: null })
+      .limit(_limit)
+      .exec();
+    for (let i = 0; i < uncheckedCompanies.length; i++) {
+      await wait(1000);
+      const currentCompany = uncheckedCompanies[i];
+      const response = await company.checkVisaSponsorship(currentCompany.id);
+      if (response === null) continue;
+      Console.green(`check ${currentCompany.title} and visa status is ${response}`)
+      await currentCompany.update({ $set: { visa: response } });
+    }
+  };
 
   static getLinkedinCompanyUsers: httpHandler = async (req, res) => {
     const UserAp = new UserApp();

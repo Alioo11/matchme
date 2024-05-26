@@ -1,5 +1,6 @@
 interface ISkill {
-  name: string;
+  title: string;
+  yearsOfExperience: number;
 }
 
 export default ISkill;

@@ -5,6 +5,7 @@ const UserMongoModel = new Schema<IUser>({
   name: { type: String, default: null },
   linkedinProfile: { type: String, required: true, unique: true },
   company: { type: Types.ObjectId, ref: "company" },
+  viewed: { type: Boolean, default: false },
 });
 
 const UserModel = model("user", UserMongoModel);
