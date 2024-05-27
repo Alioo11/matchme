@@ -31,6 +31,7 @@ cron.schedule("30 2-23 * * *", () => CrawlerTask.startCrawling(120)); // minute 
 cron.schedule("0 2-23 * * *", () => CompanyTask.checkCompaniesVisaSponsorShip(20)); // minute 0 of every hour from 2AM to 11PM
 
 app.listen(env.port, () => {
+  console.log(process.env.NODE_ENV)
   Console.magenta("****************************************");
   Console.green(
     `server is running on ${env.isProd ? "dev" : "production"}, port ${

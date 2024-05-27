@@ -5,6 +5,10 @@ import { isValidObjectId } from "mongoose";
 import PhindScrapper from "../../helpers/phind";
 import RESUME_BASE_CONTENT from "../../constants/resume";
 import ResumeApp from "../../models/Resume";
+import { IResumeHelper } from "../../types/resume";
+import ICompany from "../../types/company";
+import env from "../../constants/env";
+import { DOMAIN_ADDRESS } from "../../constants";
 
 class JobAdvertController {
   private static jobAdvert = new JobAdvertApp();
@@ -128,12 +132,35 @@ class JobAdvertController {
     }
   };
 
-  static createResume: httpHandler = async (req, res) => {
+  static createResumeFromJobadvertPDF: httpHandler = async (req, res) => {
+    const resumeAp = new ResumeApp();
+    try{
+      const resumeContent = req.body as IResumeHelper & {companyName: ICompany["title"]};
+      const path = await resumeAp.createResumePDF(resumeContent , resumeContent.companyName || "");
+      res.status(200).json({link: env.isProd ? `${DOMAIN_ADDRESS}${path}` : path });
+    }catch(error){
+      res.status(500);
+    }
+  }
+
+
+  static getResumeContentByJobadvertContent: httpHandler = async (req, res) => {
     const resumeAp = new ResumeApp();
     try{
       const jobAdvertId = req.params.id as string;
-      const path = await resumeAp.createResume(jobAdvertId)
-      res.status(200).json({link:path});
+      const result = await resumeAp.generateResumeFromJobadvert(jobAdvertId);
+      res.status(200).json(result);
+    }catch(error){
+      res.status(500);
+    }
+  }
+
+  static createResumePDFFromJobadvert: httpHandler = async (req, res) => {
+    const resumeAp = new ResumeApp();
+    try{
+      const jobAdvertId = req.params.id as string;
+      const path = await resumeAp.createResumeFromJobadvertPDF(jobAdvertId)
+      res.status(200).json({link: env.isProd ? `${DOMAIN_ADDRESS}${path}` : path });
     }catch(error){
       res.status(500);
     }

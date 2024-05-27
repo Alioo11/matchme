@@ -1,6 +1,6 @@
 import fs, { existsSync } from "fs";
 import cheerio from "cheerio";
-import Skill from "./skill";
+import {Skill} from "./skill";
 import { defaultSkills } from "../constants/skillSet";
 import {
   defaultIdekavanMentions,
@@ -10,6 +10,9 @@ import {
 } from "../constants/resumeDefaults";
 import createBrowser from "./browser";
 import path from "path";
+
+
+
 
 class ResumeHelper {
   template: string = resumeTemplate;
