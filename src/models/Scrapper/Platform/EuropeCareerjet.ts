@@ -41,7 +41,7 @@ class EuropeCareerjetScrapper implements IScrapper {
       console.yellow(`something went wrong when scrapping ${this.platform}`);
       console.log(error);
       page.close();
-      browser.close();
+      await browser.close();
       return [];
     }
   };
@@ -87,7 +87,7 @@ class EuropeCareerjetScrapper implements IScrapper {
       };
 
       page.close();
-      browser.close();
+      await browser.close();
 
       console.green(`@@- successfully scrapped ${identifier} on ${this.platform} -@@`);
 
@@ -97,7 +97,7 @@ class EuropeCareerjetScrapper implements IScrapper {
       console.yellow(`something went wrong when crawlPlatformByIdentifier ${this.platform}`);
       console.log(error);
       page.close();
-      browser.close();
+      await browser.close();
       return null;
     }
   };
@@ -112,14 +112,14 @@ class EuropeCareerjetScrapper implements IScrapper {
       const isExpired = await title?.evaluate((element) => element.textContent?.includes("expired"))!;
 
       page.close();
-      browser.close();
+      await browser.close();
       return !!isExpired;
     } catch (error) {
       console.red("@@- something went wrong -@@");
       console.yellow(`something went wrong when crawlPlatformByIdentifier ${this.platform}`);
       console.log(error);
       page.close();
-      browser.close();
+      await browser.close();
       return null;
     }
   };

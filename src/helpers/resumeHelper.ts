@@ -67,12 +67,12 @@ class ResumeHelper {
           bottom: "10mm",
         },
       });
-      browser.close();
+      await browser.close();
       fs.rmSync(HTML_FILE_PATH);
       return PDF_FILE_PATH;
     }catch(error){
       console.log({error})
-      browser.close();
+      await browser.close();
       return null
     }
   };

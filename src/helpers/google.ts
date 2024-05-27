@@ -24,7 +24,7 @@ class GoogleScrapper {
     } catch (error) {
       console.log("Error While Scrapping Google");
       console.log(error);
-      browser.close();
+      await browser.close();
       return null;
     }
   };
