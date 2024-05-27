@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs, { existsSync } from "fs";
 import cheerio from "cheerio";
 import Skill from "./skill";
 import { defaultSkills } from "../constants/skillSet";
@@ -47,11 +47,12 @@ class ResumeHelper {
   generatePDF = async (fileName:string) => {
     const browser = await createBrowser();
     try{
+      const rootPathDir = path.resolve("./");
       const HTML_FILE_PATH = "static/template.html";
       const PDF_FILE_PATH = `/static/${fileName}.pdf`;
+      if(!existsSync(`${rootPathDir}/static`)) fs.mkdirSync(`${rootPathDir}/static`);
       this.writeHTMLFile(HTML_FILE_PATH);
       const page = await browser.newPage();
-      const rootPathDir = path.resolve("./");
       await page.goto(`file://${rootPathDir}/${HTML_FILE_PATH}`, { waitUntil: "networkidle2" });
       await page.pdf({
         path: `${rootPathDir}${PDF_FILE_PATH}`,
