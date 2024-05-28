@@ -159,7 +159,7 @@ class JobAdvertController {
     const resumeAp = new ResumeApp();
     try{
       const jobAdvertId = req.params.id as string;
-      const path = await resumeAp.createResumeFromJobadvertPDF(jobAdvertId)
+      const path = await resumeAp.createResumeFromJobadvertPDF(jobAdvertId);
       res.status(200).json({link: env.isProd ? `${DOMAIN_ADDRESS}${path}` : path });
     }catch(error){
       res.status(500);

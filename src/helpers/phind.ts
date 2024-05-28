@@ -7,9 +7,9 @@ class PhindScrapper {
   private createBrowser = createBrowser;
 
   prompt = async (request: string) => {
-    try{
     const browser = await this.createBrowser({headless: true,args: ["--no-sandbox", "--disable-setuid-sandbox"]});
     const page = await browser.newPage();
+    try{
     await page.setUserAgent(useragent.getRandom());
     await page.goto(PHIND_URL, { waitUntil: "networkidle2" });
     await page.waitForSelector(".searchbox-textarea");
@@ -25,6 +25,7 @@ class PhindScrapper {
     }catch(error){
       console.log("Error while prompting phind");
       console.log(error);
+      await browser.close()
       return null;
     }
   };
