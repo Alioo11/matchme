@@ -20,7 +20,7 @@ class EuropeCareerjetScrapper implements IScrapper {
 
       for (let i = 0; i < 100; i++) {
         await wait(1000); /** wait to prevent IP blocking :| */
-        await page.goto(`${this.platformBaseURL}/frontend-jobs?p=${i}`, { timeout: 10000 });
+        await page.goto(`${this.platformBaseURL}/frontend-developer-jobs?p=${i}`, { waitUntil:"networkidle2"});
         const jobUrl = await page.$$eval(".job", (elements) =>
           elements.map((element) => element.getAttribute("data-url"))
         );

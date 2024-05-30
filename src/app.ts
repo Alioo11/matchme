@@ -10,6 +10,7 @@ import cron from "node-cron";
 import bodyParser from "body-parser";
 import Console from "./helpers/console";
 import CompanyTask from "./models/Company/task";
+import CrawlerTask from "./models/Crawler/task";
 
 const app = express();
 
