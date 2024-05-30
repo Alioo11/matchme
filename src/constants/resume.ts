@@ -1,21 +1,25 @@
 const RESUME_BASE_CONTENT = `Ali Salehi 
-Passionate Frontend Developer with 3 years of experience, specializing in developing robust, elegant, and cross-browser/cross-device web applications using React, JavaScript, HTML5/CSS3, GIT, and SQL. Eager to contribute to a dynamic team at iO, where I can leverage my skills to create high-quality user experiences for international customers. Committed to continuous learning and self-improvement, I am excited about the opportunity to expand my skill set and contribute as a frontend developer.
 
-Work Experience 
+Work Experience:
 Front End Developer 
 Idekavan Group - Tehrān 
 July 2022 to February 2024 
-• Built scalable development pipelines and workflows, resulting in a 2x acceleration in delivery speed and a 50% reduction in bugs and have delivery and quality balanced.
-• Refactored project codebase, eliminating deprecated logic to achieve a more scalable and predictable flow, enhancing maintainability and performance. 
-• Authored comprehensive documentation outlining merge request standards and best practices, leading to improved quality of merge requests and reduced review time by 50%. 
-• Incorporated JSdoc and other documentation tools to document project components, resulting in enhanced readability and scalability.
+• Implemented a CLI tool for project refactoring, reducing project refactoring effort by 40%, which increased team productivity and streamlined development processes.
+• Optimized Dockerfile to decrease container size by 50% and reduce build time failure rate by 30%, improving deployment efficiency and reliability. 
+• Introduced Cypress testing for a CRM application, resulting in a 10% reduction in bug reports and significantly enhancing application stability and user satisfaction. 
+• Authored comprehensive documentation outlining merge request standards and best practices, enhancing code quality and facilitating smoother team collaboration.
+• Consistently delivered product requirements while upholding high standards for software quality, ensuring the delivery of reliable and user-centric solutions.
+• Conducted A/B testing on the pricing page with SEO considerations, increasing user engagement by 20% and improving conversion rates.
 Front End Developer 
-Nahira Tech - Tehran 
+Nahira Tech - Tehrān 
 July 2021 to February 2022 
-• Engaged in contributing to the development of a healthcare platform, leveraging expertise in React, TypeScript, and GraphQL to enhance user experience and functionality while maintaining transparency and building strong client relationships, resulting in an 80% client satisfaction rate.
-• Left after completing one project due to the limited growth prospects and the desire for professional advancement, transitioned to a new role with 50% higher responsibility.
-Skills 
+• ELeveraged experience with Next.js and TypeScript to optimize SEO for a healthcare platform, resulting in a 30% increase in organic traffic and improved search engine rankings.
+• Developed and maintained a real-time multiplayer game application using React and Socket.io, significantly improving user engagement and achieving a 20% increase in active user sessions.
+• Migrated application’s client API from REST to GraphQL, optimizing network traffic and reducing project complexity, resulting in faster data retrieval and streamlined development.
+• Implemented a business analytics dashboard using data visualization tools, leading to enhanced data insights, informed decision-making, and a 25% increase in operational efficiency.
+• Developed integration with third-party services, significantly expanding customer support capabilities and boosting user satisfaction by 30%.
 
+Skills:
 • HTML (3 years)
 • CSS (3 years) 
 • JavaScript (3 years) 
@@ -31,9 +35,6 @@ Skills
 • Algorithms & Data structures
 • Object-oriented-programming & design patterns 
 
-Education 
-Bachelor's degree in Computer Engineering Islamic Azad University 
-January 2020 to Present 
 `;
 
 

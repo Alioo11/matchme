@@ -98,7 +98,7 @@ const resumeTemplate = `<!DOCTYPE html>
             <p class="contact-info">
                 Tehrān<br>
                 <a href="mailto:dev.alisalehi@gmail.com">dev.alisalehi@gmail.com</a><br>
-                +989912011922<br>
+                <a href="tel:+989912011922" target="_blank">+98 991 201 1922</a> </br>
                 <a href="https://github.com/Alioo11" target="_blank">Github</a>
                 <a href="https://www.linkedin.com/in/ali-salehi-194b4b233/" target="_blank">Linkedin</a>
             </p>
@@ -132,8 +132,8 @@ const resumeTemplate = `<!DOCTYPE html>
             <h2 class="section">Education</h2>
             <div class="education">
                 <p>Bachelor's degree in Computer Engineering<br>
-                <strong>Islamic Azad University</strong><br>
-                January 2020 to Present</p>
+                <strong>Azad University</strong><br>
+                January 2020 to June 2024</p>
             </div>
         </div>
     </div>

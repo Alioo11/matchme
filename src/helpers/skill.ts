@@ -40,7 +40,8 @@ class Skill implements ISkillHelper {
   }
 
   get string() {
-    return `${this.formattedTitle} (${this.yearsOfExperience} Years)`;
+    const _years = this.yearsOfExperience === 1 ? "Year" : "Years";
+    return `${this.formattedTitle} (${this.yearsOfExperience} ${_years})`;
   }
 }
 
