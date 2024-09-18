@@ -20,6 +20,7 @@ class SnappJobOpeningScrapper implements IJobOpeningScrapper {
         title: jb.title,
         link: jb.link,
         companyName: this.name,
+        sent:false
       }));
       await browser.close();
 

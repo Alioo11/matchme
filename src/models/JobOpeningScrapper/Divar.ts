@@ -19,6 +19,7 @@ class DivarJobOpeningScrapper implements IJobOpeningScrapper {
       const result: Array<IJobOpening> = frontendJobPositions.map((jb) => ({
         title: jb.title,
         link: jb.link,
+        sent:false,
         companyName: this.name,
       }));
       await browser.close();
