@@ -142,6 +142,7 @@ class JobAdvertController {
       res.status(500);
     }
   }
+  
 
 
   static getResumeContentByJobadvertContent: httpHandler = async (req, res) => {

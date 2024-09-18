@@ -12,7 +12,10 @@ const env = {
   mongoPass: process.env.MONGO_PASSWORD,
   mongoDBName: process.env.MONGO_DB_NAME,
   linkedinUser: process.env.LINKEDIN_USER || "",
-  linkedinPass: process.env.LINKEDIN_PASS || ""
+  linkedinPass: process.env.LINKEDIN_PASS || "",
+
+  gmailUser: process.env.GMAIL_USER || "",
+  gmailPass: process.env.GMAIL_PASS || "",
 };
 
 export default env;
