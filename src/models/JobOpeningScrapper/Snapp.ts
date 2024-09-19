@@ -5,7 +5,7 @@ class SnappJobOpeningScrapper implements IJobOpeningScrapper {
   url = "https://career.snapp.ir";
   name = "SNAPP";
   start: IJobOpeningScrapper["start"] = async () => {
-    const browser = await createBrowser({headless:false});
+    const browser = await createBrowser();
     try {
       const positionsPage = await browser.newPage();
       await positionsPage.goto(this.url);

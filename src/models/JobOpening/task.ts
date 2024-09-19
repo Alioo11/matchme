@@ -5,9 +5,10 @@ import nodemailer from "nodemailer";
 import JobOpeningApp from ".";
 import env from "../../constants/env";
 import mailSubscribers from "../../constants/main";
+import YektanetJobOpeningScrapper from "../JobOpeningScrapper/Yektanet";
 
 class JobOpeningTask {
-  static scrappers: Array<IJobOpeningScrapper> = [new DivarJobOpeningScrapper(), new SnappJobOpeningScrapper()];
+  static scrappers: Array<IJobOpeningScrapper> = [new DivarJobOpeningScrapper(), new SnappJobOpeningScrapper(), new YektanetJobOpeningScrapper()];
   static model = new JobOpeningApp();
   static startScrapping = async () => {
     for (let i = 0; i < this.scrappers.length; i++) {

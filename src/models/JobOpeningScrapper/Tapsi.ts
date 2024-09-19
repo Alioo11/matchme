@@ -5,7 +5,7 @@ class TapsiJobOpeningScrapper implements IJobOpeningScrapper {
   url = "https://careers.tapsi.ir/jobs?teamId=5";
   name = "TAPSI";
   start: IJobOpeningScrapper["start"] = async () => {
-    const browser = await createBrowser({headless:false});
+    const browser = await createBrowser();
     try {
       const page = await browser.newPage();
       await page.goto(this.url);

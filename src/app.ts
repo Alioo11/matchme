@@ -8,6 +8,7 @@ import cron from "node-cron";
 import bodyParser from "body-parser";
 import Console from "./helpers/console";
 import JobOpeningTask from "./models/JobOpening/task";
+import YektanetJobOpeningScrapper from "./models/JobOpeningScrapper/Yektanet";
 
 const app = express();
 
@@ -17,6 +18,10 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use("/api", rootRouter);
 app.use("/static", express.static("static"));
+
+app.get("/test" , (req,res)=>{
+  JobOpeningTask.startScrapping()
+})
 
 Console.magenta("****************************************");
 Console.cyan("scheduling Tasks !");
