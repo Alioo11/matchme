@@ -6,9 +6,19 @@ import JobOpeningApp from ".";
 import env from "../../constants/env";
 import mailSubscribers from "../../constants/main";
 import YektanetJobOpeningScrapper from "../JobOpeningScrapper/Yektanet";
+import DigikalaJobOpeningScrapper from "../JobOpeningScrapper/Digikala";
+import BazzarJobOpeningScrapper from "../JobOpeningScrapper/Bazzar";
+import TapsiJobOpeningScrapper from "../JobOpeningScrapper/Tapsi";
 
 class JobOpeningTask {
-  static scrappers: Array<IJobOpeningScrapper> = [new DivarJobOpeningScrapper(), new SnappJobOpeningScrapper(), new YektanetJobOpeningScrapper()];
+  static scrappers: Array<IJobOpeningScrapper> = [
+    new DivarJobOpeningScrapper(),
+    new SnappJobOpeningScrapper(),
+    new YektanetJobOpeningScrapper(),
+    new DigikalaJobOpeningScrapper(),
+    new BazzarJobOpeningScrapper(),
+    new TapsiJobOpeningScrapper(),
+  ];
   static model = new JobOpeningApp();
   static startScrapping = async () => {
     for (let i = 0; i < this.scrappers.length; i++) {
@@ -26,7 +36,7 @@ class JobOpeningTask {
   static publishJobOpenings = async () => {
     const jobOpenings = await this.model.objects.find({ sent: false });
 
-    for(let i = 0 ; i<jobOpenings.length ; i++){
+    for (let i = 0; i < jobOpenings.length; i++) {
       await this.model.objects.findByIdAndUpdate(jobOpenings[i].id, { $set: { sent: true } });
     }
 

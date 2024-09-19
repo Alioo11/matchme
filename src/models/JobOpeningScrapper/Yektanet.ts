@@ -74,8 +74,7 @@ class YektanetJobOpeningScrapper implements IJobOpeningScrapper {
       });
 
       const jobs = response.data.data.jobs || [];
-
-      console.log(jobs)
+      
       const frontendJobs = jobs.filter((i) => i.title.toLowerCase().includes("front"));
 
       const mappedRes: Array<IJobOpening> = frontendJobs.map((job) => {
