@@ -29,6 +29,11 @@ Console.cyan("scheduling Tasks !");
 cron.schedule('0 8 * * *', () => JobOpeningTask.startScrapping()); // 9AM
 cron.schedule('0 9 * * *', () => JobOpeningTask.publishJobOpenings()); // 9AM
 
+cron.schedule('0 18 * * *', () => JobOpeningTask.startScrapping()); // 6PM
+cron.schedule('0 19 * * *', () => JobOpeningTask.publishJobOpenings()); // 7PM
+
+
+
 app.listen(env.port, () => {
   console.log(process.env.NODE_ENV);
   Console.magenta("****************************************");
