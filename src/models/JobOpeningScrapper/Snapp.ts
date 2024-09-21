@@ -26,7 +26,7 @@ class SnappJobOpeningScrapper implements IJobOpeningScrapper {
 
       return result;
     } catch (error) {
-      return { message: "something wen't wrong while fetching the resolved data" };
+      return { message: `something wen't wrong on ${this.name}` };
     } finally {
       browser.close();
     }

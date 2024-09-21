@@ -8,7 +8,6 @@ import cron from "node-cron";
 import bodyParser from "body-parser";
 import Console from "./helpers/console";
 import JobOpeningTask from "./models/JobOpening/task";
-import YektanetJobOpeningScrapper from "./models/JobOpeningScrapper/Yektanet";
 
 const app = express();
 
@@ -19,20 +18,18 @@ app.use(bodyParser.json());
 app.use("/api", rootRouter);
 app.use("/static", express.static("static"));
 
-app.get("/test" , (req,res)=>{
-  JobOpeningTask.startScrapping()
-})
+app.get("/test", (req, res) => {
+  JobOpeningTask.startScrapping();
+  res.send("helo");
+});
 
 Console.magenta("****************************************");
 Console.cyan("scheduling Tasks !");
 
-cron.schedule('0 8 * * *', () => JobOpeningTask.startScrapping()); // 9AM
-cron.schedule('0 9 * * *', () => JobOpeningTask.publishJobOpenings()); // 9AM
-
-cron.schedule('0 18 * * *', () => JobOpeningTask.startScrapping()); // 6PM
-cron.schedule('0 19 * * *', () => JobOpeningTask.publishJobOpenings()); // 7PM
-
-
+cron.schedule("0 8 * * *", () => JobOpeningTask.startScrapping(), { scheduled: true, timezone: "Asia/Tehran" }); // 9AM
+cron.schedule("0 9 * * *", () => JobOpeningTask.publishJobOpenings(), { scheduled: true, timezone: "Asia/Tehran" }); // 9AM
+cron.schedule("0 18 * * *", () => JobOpeningTask.startScrapping(), { scheduled: true, timezone: "Asia/Tehran" }); // 6PM
+cron.schedule("0 19 * * *", () => JobOpeningTask.publishJobOpenings(), { scheduled: true, timezone: "Asia/Tehran" }); // 7PM
 
 app.listen(env.port, () => {
   console.log(process.env.NODE_ENV);

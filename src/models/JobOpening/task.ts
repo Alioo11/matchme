@@ -9,6 +9,7 @@ import YektanetJobOpeningScrapper from "../JobOpeningScrapper/Yektanet";
 import DigikalaJobOpeningScrapper from "../JobOpeningScrapper/Digikala";
 import BazzarJobOpeningScrapper from "../JobOpeningScrapper/Bazzar";
 import TapsiJobOpeningScrapper from "../JobOpeningScrapper/Tapsi";
+import Console from "../../helpers/console";
 
 class JobOpeningTask {
   static scrappers: Array<IJobOpeningScrapper> = [
@@ -24,7 +25,7 @@ class JobOpeningTask {
     for (let i = 0; i < this.scrappers.length; i++) {
       const scrapperResult = await this.scrappers[i].start();
       if (!Array.isArray(scrapperResult)) {
-        console.log(scrapperResult.message);
+        Console.red(scrapperResult.message)
         return;
       }
       for (let j = 0; j < scrapperResult.length; j++) {

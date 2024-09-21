@@ -92,21 +92,20 @@ class TapsiJobOpeningScrapper implements IJobOpeningScrapper {
   url = "https://careers.tapsi.ir/jobs?teamId=5";
   name = "TAPSI";
   start: IJobOpeningScrapper["start"] = async () => {
-    const jobs = await fetchTapsiJobs();
-
-    const frontendJobs = jobs.jobs.filter((j) => j.title.toLowerCase().includes("front"));
-
-    const res: Array<IJobOpening> = frontendJobs.map((j) => ({
-      title: j.title,
-      link: `https://careers.tapsi.ir/jobs/${j.id}`,
-      sent: false,
-      companyName: this.name,
-    }));
-    return res;
     try {
-      return [];
+      const jobs = await fetchTapsiJobs();
+
+      const frontendJobs = jobs.jobs.filter((j) => j.title.toLowerCase().includes("front"));
+
+      const res: Array<IJobOpening> = frontendJobs.map((j) => ({
+        title: j.title,
+        link: `https://careers.tapsi.ir/jobs/${j.id}`,
+        sent: false,
+        companyName: this.name,
+      }));
+      return res;
     } catch (error) {
-      return { message: "something wen't wrong while fetching the resolved data" };
+      return { message: `something wen't wrong on ${this.name}` };
     }
   };
 }

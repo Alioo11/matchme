@@ -72,7 +72,7 @@ class BazzarJobOpeningScrapper implements IJobOpeningScrapper {
 
       return res;
     } catch (error) {
-      return { message: "something wen't wrong while fetching the resolved data" };
+      return { message: `something wen't wrong on ${this.name}` };
     }
   };
 }

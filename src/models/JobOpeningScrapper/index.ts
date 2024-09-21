@@ -9,7 +9,7 @@ class DivarJobOpeningScrapper implements IJobOpeningScrapper {
     try {
       return [];
     } catch (error) {
-      return { message: "something wen't wrong while fetching the resolved data" };
+      return { message: `something wen't wrong on ${this.name}` };
     } finally {
       browser.close();
     }

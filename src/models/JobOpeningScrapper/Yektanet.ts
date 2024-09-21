@@ -88,7 +88,7 @@ class YektanetJobOpeningScrapper implements IJobOpeningScrapper {
 
       return mappedRes;
     } catch (error) {
-      return { message: "something wen't wrong while fetching the resolved data" };
+      return { message: `something wen't wrong on ${this.name}` };
     } finally {
     }
   };
