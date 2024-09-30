@@ -4,9 +4,10 @@ import Console from "./console";
 
 const connectMongoDb = async () => {
   try {
+    console.log(env.mongoHost)
     await mongoose.connect(env.mongoHost, {
-      user: env.mongoUser,
-      pass: env.mongoPass,
+      // user: env.mongoUser,
+      // pass: env.mongoPass,
       dbName: env.mongoDBName,
     });
     Console.magenta("****************************************")
