@@ -7,7 +7,7 @@ class PhindScrapper {
   private createBrowser = createBrowser;
 
   prompt = async (request: string) => {
-    const browser = await this.createBrowser({headless: true,args: ["--no-sandbox", "--disable-setuid-sandbox"]});
+    const browser = await this.createBrowser({ headless: true, args: ["--no-sandbox", "--disable-setuid-sandbox"] });
     const page = await browser.newPage();
     try{
     await page.setUserAgent(useragent.getRandom());
@@ -17,7 +17,8 @@ class PhindScrapper {
     await page.$eval('button[type="submit"]', (button) => button.click());
     await page.waitForSelector(".container-xl");
     await wait(2000);
-    await page.waitForSelector(".col-xl-12");
+    // await page.waitForSelector(".col-xl-12");
+    await page.waitForSelector('input[placeholder="Ask a followup question"], textarea[placeholder="Ask a followup question"]');
     const answerBox = await page.waitForSelector(".col-12.mt-5");
     const answer = await answerBox?.evaluate((res) => res.firstChild?.textContent);
     await browser.close();
